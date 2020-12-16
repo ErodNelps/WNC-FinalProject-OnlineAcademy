@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import NavBar from '../NavBar';
 import CourseCarousel from '../Carousel'
 import './style.css'
