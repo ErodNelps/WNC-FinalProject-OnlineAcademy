@@ -1,7 +1,8 @@
 import React, { Component, useState} from 'react';
-import {Navbar, NavItem, Icon, Dropdown, Divider} from 'react-materialize'
+import {Navbar, NavItem, Icon, Dropdown, Divider, Button} from 'react-materialize'
 import 'materialize-css'
 import './style.css'
+import { NavLink } from 'react-router-dom';
 
 export default function NavBar(props) {
   
@@ -17,12 +18,12 @@ export default function NavBar(props) {
       </nav> */}
       <Navbar
         alignLinks="right"
-        brand={<a className="brand-logo" href="#">Online Academy</a>}
+        brand={<a className="brand-logo" href="/">Online Academy</a>}
         id="mobile-nav"
         menuIcon={<Icon>menu</Icon>}
         options={{
-          draggable: true,
-          edge: 'left',
+          draggable: false,
+          edge: 'right',
           inDuration: 250,
           onCloseEnd: null,
           onCloseStart: null,
@@ -31,13 +32,13 @@ export default function NavBar(props) {
           outDuration: 200,
           preventScrolling: true
         }}>
-  <NavItem href="">
-    Getting started
-  </NavItem>
-  <NavItem href="components.html">
-    Components
-  </NavItem>
   <DropdownMenu></DropdownMenu>
+  <Button node="a" href="/register">
+    Sign up
+  </Button>
+  <Button node="a" href="/login">
+    Log in
+  </Button>
 </Navbar>
       </div>
     </React.Fragment>
@@ -45,7 +46,6 @@ export default function NavBar(props) {
 }
 
 function DropdownMenu(){
-  const [open, setDropdown] = useState(false);
     return (
       <Dropdown
     id="Dropdown_6"
