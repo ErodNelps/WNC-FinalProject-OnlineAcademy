@@ -1,3 +1,37 @@
 .description{
     background-color: dimgrey;
+    color: #EEEEEE;
+    font-family:'Montserrat', sans-serif;
+}
+
+.course-detail{
+    margin-left: 15vw;
+    margin-right: 15vw;
+    margin-top: 50px;
+    max-width: 70vw;
+    background-color: #1F1F1F;
+}
+
+.thumbnail{
+}
+
+.detail-thumbnail{
+    margin-top: 20px;
+}
+
+.detail-description{
+}
+
+.full-description{
+    word-wrap: break-word;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.course-name{
+    color: #fff;
+    margin-top: 20px;
+    font-size: 30px;
+    font-weight: bold;
 }

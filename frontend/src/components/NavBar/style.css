@@ -1,34 +1,12 @@
-.NavbarItems{
+.nav-menu{
     background: #2a2a2a;
-    height: 80px;
-    display: flex;
-    justify-content: center;  
-    align-items: center;
     font-size: 1.2rem;
 }
 
-.navbar-logo{
-    color: #fff;
-    justify-self: start;
-    margin-left: 20px;
-    cursor: pointer;
-}
 
 .fa-react{
     margin-left: 0.5rem;
     font-size: 1.6rem;
-}
-
-.nav-menu{
-    display: grid;
-    padding: 20px;
-    color: #fff;
-    grid-template-columns: repeat(2, auto);
-    gap: 20px;
-    list-style: none;
-    text-align:  center;
-    width: 70vw;
-    justify-content: start;
 }
 
 .nav-links{

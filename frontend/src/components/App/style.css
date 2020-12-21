@@ -2,19 +2,21 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  
   font-family: 'Montserrat', sans-serif;
   
 }
 .App{
-  background-color: #111111;
-}
-.pageMargin{
-  margin-left: 15vw;
-  margin-right: 15vw;
+  
 }
 
-.label{
-  color: #fff;
-  margin-top: 10px;
-  font-size: 24px;
+
+
+.footer {
+  background-color: #333333;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
 }

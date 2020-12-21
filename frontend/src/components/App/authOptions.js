@@ -1,6 +1,9 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import UserContext from "./context/userContext";
+import {Navbar, Icon, Dropdown, Divider, Button} from 'react-materialize'
+import 'materialize-css'
+import './style.css'
 
 export default function AuthOptions() {
   const { userData, setUserData } = useContext(UserContext);
@@ -18,15 +21,15 @@ export default function AuthOptions() {
   };
 
   return (
-    <nav className="auth-options">
+    <React.Fragment>
       {userData.user ? (
-        <button onClick={logout}>Log out</button>
-      ) : (
-        <>
-          <button onClick={register}>Register</button>
-          <button onClick={login}>Log in</button>
-        </>
-      )}
-    </nav>
+        <Button onClick={logout}>Log out</Button>
+        ) : (
+          <>
+              <Button onClick={register}>Sign in</Button>
+              <Button onClick={login}>Log in</Button>
+            </>
+          )}
+    </React.Fragment>
   );
 }

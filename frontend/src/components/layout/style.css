@@ -1,6 +1,10 @@
-
 .label{
     color: #fff;
     margin-top: 10px;
     font-size: 24px;
+}
+
+.pageMargin{
+    margin-left: 15vw;
+    margin-right: 15vw;
 }
