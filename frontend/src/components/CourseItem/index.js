@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Icon, Col, Card, CardTitle} from 'react-materialize'
+import { Icon, Col, Card, CardTitle} from 'react-materialize'
 import 'materialize-css'
 import './style.css'
 

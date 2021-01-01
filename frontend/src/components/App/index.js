@@ -18,6 +18,7 @@ function App() {
     token: undefined,
     user: undefined,
   });
+
   const [list, setList] = useState([]);
   const [visibleList, setVisibleList] = useState([]);
 
@@ -63,23 +64,25 @@ function App() {
   }, []);
 
   return (
+    <>
       <BrowserRouter>
         <UserContext.Provider value={{userData,setUserData}}>
-          <div className="App">
-            <NavBar />
-            <Switch>
-              <Route exact path="/">
-                <Home></Home>     
-              </Route>
-              <Route path="/login"> <Login/> </Route>
-              <Route path="/register"> <Register/> </Route>
-              <Route path="/dashboard"> <Dashboard/> </Route>
-              <Route path="/item"> <CourseDetail/> </Route>
-            </Switch>
-            <WebFooter/>
-          </div>
+            <div className="App">
+              <NavBar />
+              <Switch>
+                <Route exact path="/">
+                  <Home></Home>     
+                </Route>
+                <Route path="/login"> <Login/> </Route>
+                <Route path="/register"> <Register/> </Route>
+                <Route path="/dashboard"> <Dashboard/> </Route>
+                <Route path="/item"> <CourseDetail/> </Route>
+              </Switch>
+              <WebFooter/>
+            </div>
         </UserContext.Provider>
       </BrowserRouter>
+    </>
   );
 }
 

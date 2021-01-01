@@ -9,16 +9,20 @@ export default function MostViewed (){
         <div>
             <Table>
                 <tbody>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
-                        <CourseItem></CourseItem>
+                    <tr>
+                        <td><CourseItem></CourseItem></td>
+                        <td><CourseItem></CourseItem></td>
+                        <td><CourseItem></CourseItem></td>
+                        <td><CourseItem></CourseItem></td>
+                        <td><CourseItem></CourseItem></td>
+                    </tr>
+                    <tr>
+                        <td><CourseItem></CourseItem></td>
+                        <td><CourseItem></CourseItem></td>
+                        <td><CourseItem></CourseItem></td>
+                        <td><CourseItem></CourseItem></td>
+                        <td><CourseItem></CourseItem></td>
+                    </tr>
                 </tbody>
             </Table>
         </div>

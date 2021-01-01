@@ -6,16 +6,20 @@ const User = require("../model/userModel");
 
 router.post("/register", async (req, res) => {
   try {
-    let { email, password } = req.body;
-
+    let { email, password, passwordCheck, firstName, lastName } = req.body;
+    
     // validate
 
-    if (!email || !password)
+    if (!email || !password || !passwordCheck)
       return res.status(400).json({ msg: "Not all fields have been entered." });
     if (password.length < 6)
       return res
         .status(400)
         .json({ msg: "The password needs to be at least 5 characters long." });
+    if (password !== passwordCheck)
+      return res
+        .status(400)
+        .json({ msg: "Enter the same password twice for verification." });
 
     const existingUser = await User.findOne({ email: email });
     if (existingUser)
@@ -26,13 +30,18 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
+    if (!firstName) { firstName = email; lastName = ""; }
     const newUser = new User({
       email,
       password: passwordHash,
+      firstName,
+      lastName,
+      role: "student"
     });
     const savedUser = await newUser.save();
     res.json(savedUser);
   } catch (err) {
+    console.log("not pass");
     res.status(500).json({ error: err.message });
   }
 });
@@ -59,6 +68,8 @@ router.post("/login", async (req, res) => {
       token,
       user: {
         id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
     });
   } catch (err) {
@@ -92,11 +103,25 @@ router.post("/tokenIsValid", async (req, res) => {
   }
 });
 
+router.get("/dashboard", auth, async(req, res) =>{
+  console.log("dashboard")
+  const user = await User.findById(req.user);
+  res.json({
+    id: user._id,
+    email: user.email,
+    password: user.password,
+    role: user.role,
+  })
+});
+
 router.get("/", auth, async (req, res) => {
   const user = await User.findById(req.user);
   res.json({
-    name: user.name,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email:user.email,
     id: user._id,
+    role: user.role,
   });
 });
 

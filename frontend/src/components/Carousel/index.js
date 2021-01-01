@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Carousel, Col, Row, Card, Icon, CardTitle } from 'react-materialize';
+import React from 'react';
+import { Carousel } from 'react-materialize';
 import 'materialize-css'
 import HighlightItem from '../CourseItem/highlightItem';
 
@@ -8,7 +8,6 @@ export default function CourseCarousel () {
         console.log("clicked 1")
     }
 
- 
 
     return (
         <Carousel

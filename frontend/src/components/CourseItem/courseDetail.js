@@ -1,6 +1,6 @@
 import React from 'react'
 import 'materialize-css'
-import { Icon, CardTitle, Card, Row, Col, Divider} from 'react-materialize'
+import { Row, Col, Divider} from 'react-materialize'
 
 import './style.css'
 

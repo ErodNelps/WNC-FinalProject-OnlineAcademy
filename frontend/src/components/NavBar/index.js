@@ -37,7 +37,7 @@ export default function NavBar(props) {
 function DropdownMenu(){
     return (
       <Dropdown
-    id="Dropdown_6"
+    id="Dropdown_cat"
     options={{
       alignment: 'left',
       autoTrigger: true,
@@ -53,7 +53,7 @@ function DropdownMenu(){
       onOpenStart: null,
       outDuration: 250
     }} trigger={<a href="/category">Category</a>}>
-    <a href="#">IT</a>
+    <a href="/">IT</a>
     <Divider/>
   </Dropdown>)
 }

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import UserContext from "./context/userContext";
-import {Navbar, Icon, Dropdown, Divider, Button} from 'react-materialize'
+import {Button, Divider, Dropdown} from 'react-materialize'
 import 'materialize-css'
 import './style.css'
 
@@ -23,11 +23,34 @@ export default function AuthOptions() {
   return (
     <React.Fragment>
       {userData.user ? (
-        <Button onClick={logout}>Log out</Button>
+        <Dropdown
+        id="Dropdown_user"
+        options={{
+          alignment: 'left',
+          autoTrigger: true,
+          closeOnClick: true,
+          constrainWidth: true,
+          container: null,
+          coverTrigger: false,
+          hover: false,
+          inDuration: 150,
+          onCloseEnd: null,
+          onCloseStart: null,
+          onOpenEnd: null,
+          onOpenStart: null,
+          outDuration: 250
+        }}
+        trigger={<a style={{display: "block" }}><img src="user-student.png" style={{ height:"45px", width: "45px"}}/></a>}
+        >
+          <a href="/dashboard" >Dashboard</a>
+          <a onClick={logout} >Log out</a>
+        <Divider></Divider>
+      </Dropdown>
+        
         ) : (
           <>
-              <Button onClick={register}>Sign in</Button>
-              <Button onClick={login}>Log in</Button>
+              <Button onClick={register} style={{marginRight: "10px"}}>Sign up</Button>
+              <Button onClick={login} style={{marginRight: "10px"}}>Log in</Button>
             </>
           )}
     </React.Fragment>
