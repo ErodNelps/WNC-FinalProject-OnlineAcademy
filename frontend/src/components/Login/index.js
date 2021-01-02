@@ -11,7 +11,7 @@ export default function Login() {
   const { setUserData } = useContext(UserContext);
   const history = useHistory();
 
-  function validateForm() {
+  const validateForm = () => {
     return email.length > 0 && password.length >= 6;
   }
 

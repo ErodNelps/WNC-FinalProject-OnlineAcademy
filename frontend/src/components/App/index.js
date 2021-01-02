@@ -12,6 +12,7 @@ import WebFooter from '../App/footer'
 import CourseDetail from '../CourseItem/courseDetail'
 import UserContext from "./context/userContext";
 import './style.css'
+import AddNewCourse from '../Dashboard/addNewCourse';
 
 function App() {
   const [userData, setUserData] = useState({
@@ -77,6 +78,7 @@ function App() {
                 <Route path="/register"> <Register/> </Route>
                 <Route path="/dashboard"> <Dashboard/> </Route>
                 <Route path="/item"> <CourseDetail/> </Route>
+                <Route path="/addnewcourse"> <AddNewCourse/></Route>
               </Switch>
               <WebFooter/>
             </div>

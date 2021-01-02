@@ -5,6 +5,7 @@ import CourseItem from '../CourseItem'
 import './style.css'
 
 export default function MostViewed (){
+    //const courseItem = {title, category, lecturer}
     return(
         <div>
             <Table>

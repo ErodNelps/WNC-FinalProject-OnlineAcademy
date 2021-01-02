@@ -1,9 +1,18 @@
 import React from 'react'
 import 'materialize-css'
-import {Tab, Tabs} from 'react-materialize'
+import {Tab, Tabs, Button} from 'react-materialize'
+import { Link } from 'react-router-dom'
 
 export default function LecturerCourse(){
+    const handleAddCourse = () =>{
+
+    }
+
     return(
+        <>
+        <Link to="/addnewcourse">
+            <Button onclick={handleAddCourse}>Post new course</Button>
+        </Link>
         <Tabs className="tab-demo z-depth-1">
             <Tab
                 options={{
@@ -27,5 +36,6 @@ export default function LecturerCourse(){
                 Watchlist
             </Tab>
         </Tabs>
+        </>
     )    
 }

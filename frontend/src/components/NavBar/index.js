@@ -4,7 +4,7 @@ import 'materialize-css'
 import AuthOptions from '../App/authOptions'
 import './style.css'
 
-export default function NavBar(props) {
+export default function NavBar() {
   
   return (
     <React.Fragment>

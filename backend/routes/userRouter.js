@@ -104,7 +104,6 @@ router.post("/tokenIsValid", async (req, res) => {
 });
 
 router.get("/dashboard", auth, async(req, res) =>{
-  console.log("dashboard")
   const user = await User.findById(req.user);
   res.json({
     id: user._id,

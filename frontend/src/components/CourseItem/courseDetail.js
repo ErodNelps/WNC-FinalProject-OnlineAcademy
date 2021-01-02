@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import 'materialize-css'
-import { Row, Col, Divider} from 'react-materialize'
+import { Row, Col, Divider, Button} from 'react-materialize'
 
 import './style.css'
+import userContext from '../App/context/userContext'
 
 export default function CourseDetail(){
+    const {userData} = useContext(userContext);
+    const handleBuyBtn = () =>{
+        if(userData.user){
+
+        }
+        else{
+            console.log("You have to log in to buy a course!");
+        }
+    }
+
     return(
         <div className="course-detail">
             <Row>
@@ -18,14 +29,15 @@ export default function CourseDetail(){
                         <Row> <div className="course-name">This is a long course name</div> </Row>
                         <Row><div>brief Description</div></Row>
                         <Row>Rating</Row>
+                        <Button onclick={handleBuyBtn}>Buy course</Button>
                     </div>
                 </Col>
             </Row>
             <Divider/>
             <Row style={{marginTop:'20px'}}>
-                <Col s={4} style={{textAlign:'center'}}>Lần cuối cập nhật</Col>
-                <Col s={4} style={{textAlign:'center'}}>Số lượt đánh giá</Col>
-                <Col s={4} style={{textAlign:'center'}}>Số lượng học viên</Col>
+                <Col s={4} style={{textAlign:'center'}}>Last updated</Col>
+                <Col s={4} style={{textAlign:'center'}}>Rating count</Col>
+                <Col s={4} style={{textAlign:'center'}}>Paticipant</Col>
             </Row>
             <Divider/>
             <Row className="full-description">brief Description dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</Row>

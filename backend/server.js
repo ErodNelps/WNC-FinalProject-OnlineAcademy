@@ -31,3 +31,4 @@ mongoose.connect(
 // set up routes
 
 app.use("/users", require("./routes/userRouter"));
+app.use("/courses", require("./routes/courseRouter"));
