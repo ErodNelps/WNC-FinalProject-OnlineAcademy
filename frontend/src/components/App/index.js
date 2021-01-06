@@ -13,15 +13,13 @@ import CourseDetail from '../CourseItem/courseDetail'
 import UserContext from "./context/userContext";
 import './style.css'
 import AddNewCourse from '../Dashboard/addNewCourse';
+import MostViewed from '../MostViewed';
 
 function App() {
   const [userData, setUserData] = useState({
     token: undefined,
     user: undefined,
   });
-
-  const [list, setList] = useState([]);
-  const [visibleList, setVisibleList] = useState([]);
 
   useEffect(_ => {
     const checkLoggedIn = async () => {
@@ -49,21 +47,6 @@ function App() {
     checkLoggedIn();
   }, []);
 
-  useEffect(_ => {
-    setTimeout(_ => {
-      const items = [
-        { id: 1, title: 'Pay Bills', is_done: true },
-        { id: 2, title: 'Learn ReactJS', is_done: false },
-        { id: 3, title: 'Learn NodeJS Express', is_done: false },
-        { id: 4, title: 'Learn PassportJS', is_done: false },
-        { id: 5, title: 'Complete Final Project', is_done: false },
-        { id: 6, title: 'Have Dinner', is_done: true },
-      ];
-      setList(items);
-      setVisibleList(items);
-    })
-  }, []);
-
   return (
     <>
       <BrowserRouter>
@@ -79,6 +62,7 @@ function App() {
                 <Route path="/dashboard"> <Dashboard/> </Route>
                 <Route path="/item"> <CourseDetail/> </Route>
                 <Route path="/addnewcourse"> <AddNewCourse/></Route>
+                <Route path="/most-viewed"><MostViewed></MostViewed></Route>
               </Switch>
               <WebFooter/>
             </div>

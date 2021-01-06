@@ -13,8 +13,8 @@ export default function LecturerCourse(){
         <Link to="/addnewcourse">
             <Button onclick={handleAddCourse}>Post new course</Button>
         </Link>
-        <Tabs className="tab-demo z-depth-1">
-            <Tab
+        <Tabs className="tabs z-depth-1">
+            <Tab className="tab"
                 options={{
                 duration: 300,
                 onShow: null,
@@ -24,7 +24,7 @@ export default function LecturerCourse(){
                 title="Đăng kí">
                 Khóa học của tôi
             </Tab>
-            <Tab
+            <Tab className="tab"
                 active
                 options={{
                 duration: 300,

@@ -12,6 +12,9 @@ const courseSchema = new mongoose.Schema({
     bonus: {type: Number},
     syllabus: {type: String},
     status: {type: String},
+    views: {type: Number},
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
 });
 
 module.exports = Course = mongoose.model("course", courseSchema);
