@@ -14,7 +14,7 @@ export default function Login() {
   const validateForm = () => {
     return email.length > 0 && password.length >= 6;
   }
-
+  
   async function handleSubmit(event) {
     event.preventDefault();
     try {
@@ -60,6 +60,9 @@ export default function Login() {
         <Button block size="lg" type="submit" disabled={!validateForm()}>
           Login
         </Button>
+        <a href="/users/auth/google">
+          <div></div>
+        </a>
       </Form>
     </div>
   );

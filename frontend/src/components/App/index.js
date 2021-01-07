@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router';
+import { Route, Switch, useHistory } from 'react-router';
 import {BrowserRouter} from 'react-router-dom'
 import Axios from 'axios'
 import NavBar from '../NavBar';
@@ -14,12 +14,14 @@ import UserContext from "./context/userContext";
 import './style.css'
 import AddNewCourse from '../Dashboard/addNewCourse';
 import MostViewed from '../MostViewed';
-
+import Search from '../layout/Search'
 function App() {
   const [userData, setUserData] = useState({
     token: undefined,
     user: undefined,
   });
+
+  const history = useHistory();
 
   useEffect(_ => {
     const checkLoggedIn = async () => {
@@ -44,6 +46,7 @@ function App() {
       }
     };
 
+
     checkLoggedIn();
   }, []);
 
@@ -63,6 +66,7 @@ function App() {
                 <Route path="/item"> <CourseDetail/> </Route>
                 <Route path="/addnewcourse"> <AddNewCourse/></Route>
                 <Route path="/most-viewed"><MostViewed></MostViewed></Route>
+                <Route path="/search"><Search></Search></Route>
               </Switch>
               <WebFooter/>
             </div>

@@ -2,13 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const passport = require("passport");
 
 // set up express
 // pP7Tx6reSo265ktW
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use(passport.initialize()); 
+require("./middleware/passport");
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => console.log(`The server has started on port: ${PORT}`));
@@ -32,3 +34,4 @@ mongoose.connect(
 
 app.use("/users", require("./routes/userRouter"));
 app.use("/courses", require("./routes/courseRouter"));
+

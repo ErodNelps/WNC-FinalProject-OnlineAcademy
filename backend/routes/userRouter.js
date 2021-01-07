@@ -3,15 +3,36 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 const User = require("../model/userModel");
+const passport = require("passport");
+const nodemailer = require("nodemailer");
+
+var genOTP = Math.random();
+genOTP = genOTP * 1000000;
+genOTP = parseInt(genOTP);
+
+let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 456,
+  secure: false,
+  service : 'Gmail',
+  
+  auth: {
+    user: 'unibusiness906@gmail.com',
+    pass: 'thuong99',
+  }
+  
+});
 
 router.post("/register", async (req, res) => {
   try {
-    let { email, password, passwordCheck, firstName, lastName } = req.body;
-    
+    let { email, password, passwordCheck, firstName, lastName, otp } = req.body;
+    console.log(genOTP);
     // validate
-
-    if (!email || !password || !passwordCheck)
+    otp = parseInt(otp);
+    if (!email || !password || !passwordCheck || !otp)
       return res.status(400).json({ msg: "Not all fields have been entered." });
+    if(otp !== genOTP)
+      return res.status(400).json({msg: "Invalid OTP."})
     if (password.length < 6)
       return res
         .status(400)
@@ -44,6 +65,25 @@ router.post("/register", async (req, res) => {
     console.log("not pass");
     res.status(500).json({ error: err.message });
   }
+});
+
+router.post("/register/sendOTP", async(req, res) => {
+  let {email} = req.body;
+  if (!email)
+      return res.status(400).json({ msg: "Email must be entered." });
+  var mailOptions={
+    to: email,
+    subject: "Otp for registration is: ",
+    html: "<h3>OTP for account verification is </h3>"  + "<h1 style='font-weight:bold;'>" + genOTP +"</h1>" // html body
+  };
+  
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    console.log('Message sent: %s', info.messageId);   
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  });
 });
 
 router.post("/login", async (req, res) => {
@@ -123,5 +163,17 @@ router.get("/", auth, async (req, res) => {
     role: user.role,
   });
 });
+
+router.get("/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get("/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/", session: false }),
+  function(req, res) {
+      var token = req.user.token;
+      res.redirect("http://localhost:3000?token=" + token);
+  }
+);
 
 module.exports = router;

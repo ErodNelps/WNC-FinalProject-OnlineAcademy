@@ -1,11 +1,16 @@
-import React from 'react';
-import {Navbar, Icon, Dropdown, Divider} from 'react-materialize'
+import React, { useState } from 'react';
+import {Navbar, Icon, Dropdown, Divider } from 'react-materialize'
+import { Form, Button, FormControl } from 'react-bootstrap'
 import 'materialize-css'
 import AuthOptions from '../App/authOptions'
 import './style.css'
 
 export default function NavBar() {
-  
+  const [searchText, setSearchText] = useState();
+  async function handleSubmit(event) {
+    event.preventDefault();
+  }
+
   return (
     <React.Fragment>
       <div>
@@ -27,6 +32,9 @@ export default function NavBar() {
             preventScrolling: true
           }}>
           <DropdownMenu></DropdownMenu>
+          <Form inline>
+              <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+          </Form>
           <AuthOptions></AuthOptions>
         </Navbar>
       </div>

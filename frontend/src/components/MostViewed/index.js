@@ -10,7 +10,6 @@ export default function MostViewed (){
     const [arrayLength, setLength] = useState();
     const [halfLength, sethalfLength] = useState();
     const [loading, setLoading] = useState(true);
-    const initialList = [];
 
     useEffect(() => {
         //setTimeout(() => {
