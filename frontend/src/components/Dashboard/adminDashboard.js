@@ -27,6 +27,7 @@ export default function AdminDashboard(){
                                     Item Name
                                 </th>
                                 <th data-field="price">
+                                    <Button style={{marginRight: "10px"}}><i class="fa fa-plus" aria-hidden="true"></i></Button>
                                 </th>
                             </tr>
                         </thead>
@@ -39,7 +40,7 @@ export default function AdminDashboard(){
                                     Eclair
                                 </td>
                                 <td>
-                                   <Button style={{marginRight: "10px"}}><i class="fa fa-plus" aria-hidden="true"></i></Button>
+                                   
                                    <Button style={{marginRight: "10px"}}><i class="fa fa-trash" aria-hidden="true"></i></Button>
                                    <Button style={{marginRight: "10px"}}><i class="fa fa-pencil" aria-hidden="true"></i></Button>
                                 </td>

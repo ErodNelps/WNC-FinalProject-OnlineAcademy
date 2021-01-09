@@ -1,52 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import 'materialize-css'
+import CourseCarousel from '../Carousel'
 import { Row, Preloader } from 'react-materialize';
 import CourseItem from '../CourseItem';
-import Axios from 'axios';
 import './style.css';
+import {connect} from 'react-redux'
+import {fetchMostViewed} from '../../redux/course'
+import store from '../../redux/store'
 
-export default function MostViewed (){
-    const [mostViewed, setMostViewed] = useState([]);
-    const [arrayLength, setLength] = useState();
-    const [halfLength, sethalfLength] = useState();
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        //setTimeout(() => {
-            async function fetchItems() {
-                try {
-                    const res = await Axios.get("http://localhost:8080/courses/most-viewed");
-                    console.log(res.data);
-                    setLoading(false);
-                    setMostViewed(res.data);
-                    setLength(mostViewed.length);
-                    sethalfLength(Math.ceil(arrayLength/2));
-                } catch(err){
-                    throw new Error(`HTTP error! status: ` + err.message);
-                }   
-            }
-            
-            fetchItems();
-            
-        //}, 1000);
+const MostViewed = ({mostViewed = [], isLoading}) => {
+    useEffect(_ =>{
+        store.dispatch(fetchMostViewed());
     }, []);
 
     return(
-        <div>
-            {loading ? <Preloader /> : 
-                (<><Row>
-                    <ul>
-                        {mostViewed.splice(0,halfLength).map((course) => (
-                            <CourseItem key={course._id} course={course}></CourseItem>
-                            ))}
-                    </ul>
-                </Row>
-                <Row>
-                    <ul>
-                        {mostViewed.splice(halfLength, arrayLength).map((course) => (
-                            <CourseItem key={course._id} props={course}></CourseItem>))}
-                    </ul>
-                </Row></>)}
+        <div> 
+            {isLoading ? <Preloader /> : 
+                (<> <CourseCarousel collection={mostViewed}>
+                  </CourseCarousel></>)}
         </div>
     )
 }
+
+const mapStateToProps = state => {
+    const mostViewed =  state.courseReducer.mostViewed;
+    const isLoading = state.courseReducer.isLoading;
+    console.log(state.courseReducer.mostViewed)
+    return {
+        mostViewed, isLoading
+    }
+}
+
+export default connect(mapStateToProps)(MostViewed)

@@ -86,6 +86,29 @@ router.post("/register/sendOTP", async(req, res) => {
   });
 });
 
+router.post("/register/resendOTP", async(req, res) => {
+  let {email} = req.body;
+  if (!email)
+      return res.status(400).json({ msg: "Email must be entered." });
+      
+  genOTP = Math.random();
+  genOTP = genOTP * 1000000;
+  genOTP = parseInt(genOTP);
+  var mailOptions={
+    to: email,
+    subject: "Otp for registration is: ",
+    html: "<h3>OTP for account verification is </h3>"  + "<h1 style='font-weight:bold;'>" + genOTP +"</h1>" // html body
+  };
+  
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    console.log('Message sent: %s', info.messageId);   
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  });
+});
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;

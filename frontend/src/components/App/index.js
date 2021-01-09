@@ -67,6 +67,7 @@ function App() {
                 <Route path="/addnewcourse"> <AddNewCourse/></Route>
                 <Route path="/most-viewed"><MostViewed></MostViewed></Route>
                 <Route path="/search"><Search></Search></Route>
+                <Route path="/course/:title"><CourseDetail></CourseDetail></Route>
               </Switch>
               <WebFooter/>
             </div>

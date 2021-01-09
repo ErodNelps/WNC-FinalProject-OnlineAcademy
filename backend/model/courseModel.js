@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const courseSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     thumnail: {type: String, required: true},
     title: {type: String, required: true},
     briefDes: {type: String, required: true},
@@ -10,11 +11,11 @@ const courseSchema = new mongoose.Schema({
     subCount: {type: Number},
     price: {type: Number},
     bonus: {type: Number},
-    syllabus: {type: String},
+    syllabus: [String],
     status: {type: String},
     views: {type: Number},
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date().now },
+    updatedAt: { type: Date, default: Date().now },
 });
 
 module.exports = Course = mongoose.model("course", courseSchema);

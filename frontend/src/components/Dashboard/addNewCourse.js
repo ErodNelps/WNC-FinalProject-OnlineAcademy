@@ -9,14 +9,28 @@ import 'react-quill/dist/quill.snow.css';
 
 export default function AddNewCourse(){
     const [title, setTitle] = useState();
+    const [thumbnail, setThumbnail] = useState();
     const [briefDes, setBriefDes] = useState();
-    const [fullDes, setFullDes] = useState()
+    const [fullDes, setFullDes] = useState();
     const [price, setPrice] = useState();
     const [bonus, setBonus] = useState();
 
     
-    const handleSubmit = () =>{
-        
+    const handleSubmit = (event) =>{
+        event.preventDefault();
+        const formData = new FormData();
+
+        Axios.post("http://localhost:8080/add-new-course/img/upload", 
+                formData,
+                {'content-type': 'multipart/form-data'})
+            .then((response) => {
+                alert("Uploaded");
+            }).catch((error) => {
+        });
+    }
+
+    const test = () =>{
+        console.log(thumbnail);
     }
 
     return (
@@ -30,8 +44,10 @@ export default function AddNewCourse(){
                     autoFocus
                     type="text"
                     value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    />
+                    onChange={(e) => setTitle(e.target.value)}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.File type="file" id="thumnail" label="Thumbnail" onChange={(e) => setThumbnail({file: e.target.files})} />
                 </Form.Group>
                 <Form.Group size="lg" controlId="briefDes">
                     <Form.Label>Brief description</Form.Label>
@@ -59,8 +75,8 @@ export default function AddNewCourse(){
                     />
                 </Form.Group>
                 
-                <Button block size="lg" type="submit" style={{marginTop:"10px"}}>
-                    Register
+                <Button block size="lg" onClick={test} style={{marginTop:"10px"}}>
+                    Post
                 </Button>
             </Form>
         </div>

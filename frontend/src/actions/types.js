@@ -1,2 +1,0 @@
-export const GET_ERRORS = "GET_ERRORS";
-export const SET_CURRENT_COURSE = "SET_CURRENT_COURSE";

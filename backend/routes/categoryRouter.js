@@ -1,50 +1,67 @@
 const router = require('express').Router();
 let Category = require('../model/categoryModel');
 
-router.route('/').get((req, res) => {
-    Category.find()
-        .then(categories => res.json(categories))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
-
-
-router.route('/add').post((req, res) => {
-    const category = req.body.category;
-    const subCategories = req.body.subCategories;
+router.post('/add', (req, res) => {
+    const name = req.body.name;
     const description = req.body.description;
-
-
-    const newCategory = new Category({category,subCategories,description});
-
-    newCategory.save()
-        .then(() => res.json('Category added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
-
-router.route('/:id').get((req, res) => {
-    Category.findById(req.params.id)
-        .then(categories => res.json(categories))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
-
-router.route('/:id').delete((req, res) => {
-    Category.findByIdAndDelete(req.params.id)
-        .then(() => res.json('Category deleted.'))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
-
-router.route('/update/:id').post((req, res) => {
-    Category.findById(req.params.id)
-        .then(category => {
-            category.category = req.body.category;
-            category.subCategories =  req.body.subCategories;
-            category.description = req.body.description;
-
-            category.save()
-                .then(() => res.json('Category updated!'))
-                .catch(err => res.status(400).json('Error: ' + err));
-        })
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+  
+    if (!description || !name) {
+      return res
+        .status(400)
+        .json({ error: 'You must enter description & name.' });
+    }
+  
+    const category = new Category({
+      name,
+      description,
+      products
+    });
+  
+    category.save((err, data) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'Your request could not be processed. Please try again.'
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: `Category has been added successfully!`,
+        category: data
+      });
+    });
+  });
+  
+  // fetch all categories api
+  router.get('/list', (req, res) => {
+    Category.find({}, (err, data) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'Your request could not be processed. Please try again.'
+        });
+      }
+      res.status(200).json({
+        categories: data
+      });
+    });
+  });
+  
+  router.delete('/delete/:id',(req, res) => {
+      Category.deleteOne({ _id: req.params.id }, (err, data) => {
+        if (err) {
+          return res.status(400).json({
+            error: 'Your request could not be processed. Please try again.'
+          });
+        }
+  
+        res.status(200).json({
+          success: true,
+          message: `Category has been deleted successfully!`,
+          brand: data
+        });
+      });
+    }
+  );
+  
 
 module.exports = router;

@@ -1,12 +1,21 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import 'materialize-css'
 import { Row, Col, Divider, Button} from 'react-materialize'
-
+import { connect } from 'react-redux'
 import './style.css'
 import userContext from '../App/context/userContext'
+import store from '../../redux/store'
+import { fetchCourseSeleccted } from '../../redux/course'
+import { useHistory } from 'react-router-dom'
 
-export default function CourseDetail(){
+const CourseDetail = ({courseSelected}) =>{
     const {userData} = useContext(userContext);
+    let history = useHistory()
+    let id = history.location.pathname.replace('/course/','')
+    console.log(id);
+    useEffect(() =>{
+        store.dispatch(fetchCourseSeleccted(id))
+    },[])
     const handleBuyBtn = () =>{
         if(userData.user){
 
@@ -18,30 +27,38 @@ export default function CourseDetail(){
 
     return(
         <div className="course-detail">
-            <Row>
+            {courseSelected ? 
+            (<><Row>
                 <Col className="thumbnail" >
                     <img className="detail-thumbnail"
-                    src="data:image/jpeg;base64,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" 
+                    src={courseSelected.thumbnail} 
                     maxwidth="200" maxheight="200"></img>
                 </Col>
                 <Col className="detail-description" s={9}>
                     <div >
-                        <Row> <div className="course-name">This is a long course name</div> </Row>
-                        <Row><div>brief Description</div></Row>
-                        <Row>Rating</Row>
+                        <Row> <div className="course-name">{courseSelected.title}</div> </Row>
+                        <Row><div>{courseSelected.briefDes}</div></Row>
+                        <Row>Rating: {courseSelected.rating}</Row>
                         <Button onclick={handleBuyBtn}>Buy course</Button>
                     </div>
                 </Col>
             </Row>
             <Divider/>
-            <Row style={{marginTop:'20px'}}>
-                <Col s={4} style={{textAlign:'center'}}>Last updated</Col>
-                <Col s={4} style={{textAlign:'center'}}>Rating count</Col>
-                <Col s={4} style={{textAlign:'center'}}>Paticipant</Col>
+            <Row style={{marginTop:'20px', color: "floralwhite"}}>
+                <Col s={4} style={{textAlign:'center'}}>Last updated: </Col>
+                <Col s={4} style={{textAlign:'center'}}>Rating count: {courseSelected.rateCount}</Col>
+                <Col s={4} style={{textAlign:'center'}}>Paticipant: {courseSelected.subCount}</Col>
             </Row>
             <Divider/>
-            <Row className="full-description">brief Description dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</Row>
-            <Divider/>
+            <Row className="full-description">{courseSelected.fullDes}</Row>
+            <Divider/></>) : <p>Course not found</p>}
         </div>
     )
-}
+};
+
+const mapStateToProps = state =>{
+    const courseSelected = state.courseReducer.courseSelected;
+    return {courseSelected}
+};
+
+export default connect (mapStateToProps)(CourseDetail)
