@@ -26,7 +26,6 @@ let transporter = nodemailer.createTransport({
 router.post("/register", async (req, res) => {
   try {
     let { email, password, passwordCheck, firstName, lastName, otp } = req.body;
-    console.log(genOTP);
     // validate
     otp = parseInt(otp);
     if (!email || !password || !passwordCheck || !otp)
@@ -51,7 +50,9 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
-    if (!firstName) { firstName = email; lastName = ""; }
+    if (!firstName) { firstName = email; }
+    if (!lastName) { lastName = ""; }
+
     const newUser = new User({
       email,
       password: passwordHash,
@@ -86,11 +87,65 @@ router.post("/register/sendOTP", async(req, res) => {
   });
 });
 
+router.post("/add-new-course", async (req, res) => {
+  try{
+      let {thumbnail, title, briefDes, fullDes, rating,rateCount,subCount,price,bonus,syllabus, status, views, createdAt, updatedAt, lecturer} = req.body;
+      const newCourse = new Course({thumbnail, title, briefDes, fullDes, rating,rateCount,subCount,price,bonus,syllabus, status, views, createdAt, updatedAt, lecturer});
+      const savedCourse = await newCourse.save();
+      res.json(savedCourse);
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
+
+})
+
+router.post("/admin/add-new-user", async (req, res)=>{
+  try {
+    let { email, password, passwordCheck, firstName, lastName } = req.body;
+    
+    if (!email || !password || !passwordCheck)
+      return res.status(400).json({ msg: "Not all fields have been entered." });
+    if (password.length < 6)
+      return res
+        .status(400)
+        .json({ msg: "The password needs to be at least 5 characters long." });
+    if (password !== passwordCheck)
+      return res
+        .status(400)
+        .json({ msg: "Enter the same password twice for verification." });
+    
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser)
+      return res
+        .status(400)
+        .json({ msg: "An account with this email already exists." });
+    
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    if (!firstName) { firstName = email; }
+    if (!lastName) { lastName = ""; }
+
+    const newUser = new User({
+      email,
+      password: passwordHash,
+      firstName,
+      lastName,
+      role: "lecturer"
+    });
+    
+    const savedUser = await newUser.save();
+    res.json(savedUser);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post("/register/resendOTP", async(req, res) => {
   let {email} = req.body;
   if (!email)
       return res.status(400).json({ msg: "Email must be entered." });
-      
+
   genOTP = Math.random();
   genOTP = genOTP * 1000000;
   genOTP = parseInt(genOTP);

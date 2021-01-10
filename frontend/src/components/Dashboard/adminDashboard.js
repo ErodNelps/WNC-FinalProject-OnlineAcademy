@@ -5,6 +5,7 @@ import { Tabs, Tab, Table, Button } from 'react-materialize'
 import './style.css'
 import userContext from '../App/context/userContext'
 
+
 export default function AdminDashboard(){
     const {userData} = useContext(userContext)
     return(
@@ -91,7 +92,7 @@ export default function AdminDashboard(){
                     responsiveThreshold: Infinity,
                     swipeable: false
                     }}
-                    title="Course">
+                    title="User">
                     <Table>
                         <thead>
                             <tr>
@@ -105,7 +106,7 @@ export default function AdminDashboard(){
                                     Role
                                 </th>
                                 <th>
-                                    
+                                <a href="/addnewuser"><Button style={{marginRight: "10px"}}><i className="fa fa-plus" aria-hidden="true" ></i></Button></a>
                                 </th>
                             </tr>
                         </thead>

@@ -21,7 +21,7 @@ const CourseDetail = ({courseSelected}) =>{
 
         }
         else{
-            console.log("You have to log in to buy a course!");
+            alert("You have to log in to buy a course!");
         }
     }
 
@@ -39,7 +39,7 @@ const CourseDetail = ({courseSelected}) =>{
                         <Row> <div className="course-name">{courseSelected.title}</div> </Row>
                         <Row><div>{courseSelected.briefDes}</div></Row>
                         <Row>Rating: {courseSelected.rating}</Row>
-                        <Button onclick={handleBuyBtn}>Buy course</Button>
+                        <Button onClick={handleBuyBtn}>Buy course</Button>
                     </div>
                 </Col>
             </Row>

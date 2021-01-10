@@ -15,6 +15,7 @@ import './style.css'
 import AddNewCourse from '../Dashboard/addNewCourse';
 import MostViewed from '../MostViewed';
 import Search from '../layout/Search'
+import AddNewUser from '../Dashboard/addNewUser';
 function App() {
   const [userData, setUserData] = useState({
     token: undefined,
@@ -68,6 +69,7 @@ function App() {
                 <Route path="/most-viewed"><MostViewed></MostViewed></Route>
                 <Route path="/search"><Search></Search></Route>
                 <Route path="/course/:title"><CourseDetail></CourseDetail></Route>
+                <Route path="/addnewuser"><AddNewUser></AddNewUser></Route>
               </Switch>
               <WebFooter/>
             </div>

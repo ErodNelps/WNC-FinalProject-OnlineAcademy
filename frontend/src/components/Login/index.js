@@ -14,7 +14,7 @@ export default function Login() {
   const validateForm = () => {
     return email.length > 0 && password.length >= 6;
   }
-  
+
   async function handleSubmit(event) {
     event.preventDefault();
     try {
@@ -30,11 +30,9 @@ export default function Login() {
         localStorage.setItem("auth-token", loginRes.data.token);
         history.push("/");
       } catch (err) {
-        //console.log(err.response.data.msg);
+        alert(err.response.data.msg);
         //&& setError(err.response.data.msg);
     }
-    console.log(event.target.email.value)
-    console.log(event.target.password.value)
   }
 
   return (
