@@ -1,13 +1,19 @@
-import React, { useContext } from 'react'
+import React, { useEffect } from 'react'
 import 'materialize-css'
 import { Tabs, Tab, Table, Button } from 'react-materialize'
 
 import './style.css'
-import userContext from '../App/context/userContext'
+import {fetchAllUser} from '../../redux/user'
+import {fetchAllCourse} from '../../redux/course'
+import store from '../../redux/store'
+import {connect} from 'react-redux'
 
+const AdminDashboard = ({users = [], courses = [] }) =>{
+    useEffect(_ =>{
+        store.dispatch(fetchAllUser());
+        store.dispatch(fetchAllCourse());
+    }, []);
 
-export default function AdminDashboard(){
-    const {userData} = useContext(userContext)
     return(
             <Tabs className="tabs z-depth-1">
                 <Tab active className="tab"
@@ -64,24 +70,25 @@ export default function AdminDashboard(){
                                     Name
                                 </th>
                                 <th data-field="name">
-                                    Item Name
+                                    Subcription count
                                 </th>
                                 <th data-field="price">
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                        {courses ? 
+                            (<>{courses.map((course, index) => (<tr key={index}>
                                 <td>
-                                    Jonathan
+                                    {course.title}
                                 </td>
                                 <td>
-                                    Lollipop
+                                    {course.subCount}
                                 </td>
                                 <td>
-                                   <Button style={{marginRight: "10px"}}><i class="fa fa-trash" aria-hidden="true"></i></Button>
+                                   <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
                                 </td>
-                            </tr>
+                            </tr>))}</>) : <></>}
                         </tbody>
                     </Table>
                 </Tab>
@@ -111,25 +118,35 @@ export default function AdminDashboard(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {users ? 
+                            (<>{users.map((user, index) => (<tr key={index}>
                                 <td>
-                                    Jonathan
+                                    {user.firstName} {user.lastName}
                                 </td>
                                 <td>
-                                    Lollipop
+                                    {user.email}
                                 </td>
                                 <td>
-                                    Lecturer
+                                    {user.role}
                                 </td>
                                 <td>
-                                   <Button style={{marginRight: "10px"}}><i class="fa fa-plus" aria-hidden="true"></i></Button>
-                                   <Button style={{marginRight: "10px"}}><i class="fa fa-trash" aria-hidden="true"></i></Button>
-                                   <Button style={{marginRight: "10px"}}><i class="fa fa-pencil" aria-hidden="true"></i></Button>
+                                   <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
+                                   <Button style={{marginRight: "10px"}}><i className="fa fa-pencil" aria-hidden="true"></i></Button>
                                 </td>
-                            </tr>
+                            </tr>))}</>) : <></>}
                         </tbody>
                     </Table>
                 </Tab>
             </Tabs>
     )
 }
+
+const mapStateToProps = state => {
+    const users = state.userReducer.users;
+    const courses = state.courseReducer.courses;
+    return {
+        users, courses
+    }
+}
+
+export default connect(mapStateToProps)(AdminDashboard)

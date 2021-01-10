@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import 'materialize-css'
 import CourseCarousel from '../Carousel'
-import { Row, Preloader } from 'react-materialize';
-import CourseItem from '../CourseItem';
+import { Preloader } from 'react-materialize';
 import './style.css';
 import {connect} from 'react-redux'
 import {fetchMostViewed} from '../../redux/course'

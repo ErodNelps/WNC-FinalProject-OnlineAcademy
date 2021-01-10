@@ -8,7 +8,6 @@ import {Divider ,Dropdown} from 'react-materialize';
 import 'materialize-css';
 
 export default function AddNewUser() {
-    const {userData} = useContext(userContext);
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [passwordCheck, setPasswordCheck] = useState();
@@ -27,7 +26,7 @@ export default function AddNewUser() {
                 {headers:{"Content-Type" : "application/json"}}
             ).then(res => {
                 alert("New user added!")
-                history.push("/");
+                history.push("/dashboard");
             })
                 
         } catch (err) {

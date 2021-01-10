@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
 import courseReducer from "./course"
-import {DEFAULT} from './actions/types'
+import userReducer from "./user"
 
-export default combineReducers({ courseReducer, });
+export default combineReducers({ courseReducer, userReducer});

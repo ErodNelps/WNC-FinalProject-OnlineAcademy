@@ -12,7 +12,6 @@ const CourseDetail = ({courseSelected}) =>{
     const {userData} = useContext(userContext);
     let history = useHistory()
     let id = history.location.pathname.replace('/course/','')
-    console.log(id);
     useEffect(() =>{
         store.dispatch(fetchCourseSeleccted(id))
     },[])

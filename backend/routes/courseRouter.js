@@ -23,8 +23,16 @@ router.post("/add-new-course/img/upload", async(req, res) => {
 router.get("/most-viewed", async (req, res) => {
     try{
         const mostViewedCourse = await Course.find({}).sort('-views').limit(10);
-        //console.log(mostViewedCourse);
         res.json(mostViewedCourse);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get("/get-courses-list", async (req, res) => {
+    try{
+        const courses = await Course.find({});
+        res.json(courses);
     }   catch (err) {
         res.status(500).json({ error: err.message });
     }

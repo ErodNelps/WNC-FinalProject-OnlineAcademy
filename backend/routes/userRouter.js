@@ -231,6 +231,18 @@ router.get("/dashboard", auth, async(req, res) =>{
   })
 });
 
+router.get("/get-users-list", async (req, res) => {
+  await User.find({}, (err, data) => {
+    if (err) {
+      return res.status(400).json({
+        error: 'Your request could not be processed. Please try again.'
+      });
+    }
+
+    res.status(200).json(data);
+  });
+});
+
 router.get("/", auth, async (req, res) => {
   const user = await User.findById(req.user);
   res.json({

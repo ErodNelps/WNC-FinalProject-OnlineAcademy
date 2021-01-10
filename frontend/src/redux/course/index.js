@@ -12,7 +12,6 @@ import {
 
   const initialState = {
     courses: [],
-    course: {},
     courseSelected: {
       _id:'',
       thumbnail:'',
@@ -50,46 +49,6 @@ import {
       default: return state;
     }
   };
-  // export const fetchProducts = () => {
-//     try {
-//         const res = await Axios.get('http:/localhost:3000/courses/');
-//         dispatch({
-//             type: FETCH_COURSES,
-//             payload: res.data
-//         });
-//     } catch (error) {
-//         handleError(error, dispatch);
-//     }
-// };
-
-// export const fetchCourseSeleccted = () => {
-//     try {
-//         const res = await Axios.get('http:/localhost:3000/courses/select');
-//         dispatch({
-//             type: FETCH_COURSE_SELECT,
-//             payload: res.data
-//         });
-//     } catch (error) {
-//         handleError(error, dispatch);
-//     }
-// };
-
-// export const fetchProducts = () => {
-//   return async (dispatch, getState) => {
-//     dispatch({ type: SET_COURSE_LOADING, payload: true });
-//       try {
-//           const res = await Axios.get('http:/localhost:3000/courses/');
-//           dispatch({
-//               type: FETCH_COURSES,
-//               payload: res.data
-//           });
-//       } catch (error) {
-//           handleError(error, dispatch);
-//       } finally {
-//         dispatch({ type: SET_COURSE_LOADING, payload: false });
-//       }
-//   };
-// };
 
 export function fetchMostViewed () {
   return async (dispatch, getState) => {
@@ -103,11 +62,33 @@ export function fetchMostViewed () {
                   rating : data.rating, rateCount: data.rateCount,subCount: data.subCount, price: data.price,
                   bonus: data.bonus, syllabus: data.syllabus, status: data.status, views: data.views, createdAt: data.createdAt, updatedAt: data.updatedAt})
           }
-          console.log("Server Response:")
-          console.log(mostViewed)
           dispatch({
               type: FETCH_COURSE_MOST_VIEWED,
               payload: mostViewed
+          });
+      } catch(error){
+        handleError(error, dispatch);
+      } finally {
+        dispatch({ type: SET_COURSE_LOADING, payload: false });
+      }
+  }   
+}
+
+export function fetchAllCourse () {
+  return async (dispatch, getState) => {
+    dispatch({ type: SET_COURSE_LOADING, payload: true });
+      try {
+          const res = await Axios.get("http://localhost:8080/courses/get-courses-list");
+          let courses = []
+          for(var i in res.data){
+              var data = res.data[i];
+              courses.push({_id: data._id, thumbnail: data.thumbnail, title: data.title, briefDes : data.briefDes, fullDes : data.fullDes, 
+                  rating : data.rating, rateCount: data.rateCount,subCount: data.subCount, price: data.price,
+                  bonus: data.bonus, syllabus: data.syllabus, status: data.status, views: data.views, createdAt: data.createdAt, updatedAt: data.updatedAt})
+          }
+          dispatch({
+              type: FETCH_COURSES,
+              payload: courses
           });
       } catch(error){
         handleError(error, dispatch);
