@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
@@ -10,29 +10,20 @@ import userContext from "../App/context/userContext";
 
 export default function AddNewCourse(){
     const {userData} = useContext(userContext);
+    const history = useHistory();
     const [title, setTitle] = useState();
-    const [thumbnail, setThumbnail] = useState();
     const [briefDes, setBriefDes] = useState();
     const [fullDes, setFullDes] = useState();
-    const [price, setPrice] = useState();
-    const [bonus, setBonus] = useState();
-    const [syllabus, setSyllabus] = useState([]);
+    const [price, setPrice] = useState(0);
+    const [bonus, setBonus] = useState(0);
     const [createdAt, setCreatedAt] = useState('');
     const [numVideo, setNumVideo] = useState(0);
-
+    const thumbnailRef = useRef(null);
     const children = [];
     useEffect(() => {
         setCreatedAt(getCurrentDate());
-    })
+    }, [])
 
-    for (var i = 0; i < numVideo; i += 1) {
-      children.push(<Form.Group size="lg" controlId="syllabus" key={i} name={i}>
-      <Form.Label>Chapter{i + 2}</Form.Label>
-      <Form.Control
-      type="text"
-      onChange={(e) => setSyllabus([...syllabus, e.target.value])}/>
-        </Form.Group>);
-    };
 
     const onAddChild = () => {
         setNumVideo(numVideo + 1)
@@ -42,13 +33,16 @@ export default function AddNewCourse(){
         event.preventDefault();
 
         try {
-            alert("Today is: "+ createdAt)
-            const newCourse =  { thumbnail, title, briefDes, fullDes, price, bonus, syllabus, createdAt };
-            await Axios.post(
-              "http://localhost:8080/users/add-new-course",
+            const thumbnail = new FormData()
+            thumbnail.append("thumbnail", thumbnailRef.current.files[0])
+            const newCourse =  { title, briefDes, price, bonus, createdAt };
+            await Axios.post( "http://localhost:8080/courses/upload-image", thumbnail).then(()=>{ Axios.post(
+              "http://localhost:8080/courses/add-new-course/" + userData.user.id,
               newCourse
             ).then((res) => {
                 alert("New course posted successfully!")
+                history.push("/dashboard")
+            })
             });
             
           } catch (err) {
@@ -57,8 +51,8 @@ export default function AddNewCourse(){
     }
 
     const getCurrentDate = () => {
-        var today = new Date();
-        return today.toLocaleString()
+        var today = Date.now();
+        return today;
     }
     return (
         <div className="Login">
@@ -74,7 +68,7 @@ export default function AddNewCourse(){
                     onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.File type="file" id="thumnail" label="Thumbnail" onChange={(e) => setThumbnail({file: e.target.files})} />
+                    <Form.File type="file" id="thumnail" label="Thumbnail" ref={thumbnailRef} />
                 </Form.Group>
                 <Form.Group size="lg" controlId="briefDes">
                     <Form.Label>Brief description</Form.Label>
@@ -101,17 +95,7 @@ export default function AddNewCourse(){
                     onChange={(e) => setBonus(e.target.value)}
                     />
                 </Form.Group>
-                <Form.Group size="lg" controlId="syllabus">
-                    <Form.Label>Course syllabus - </Form.Label>
-                    <Form.Label>Chapter 1</Form.Label>
-                    <Form.Control
-                    type="text"
-                    onChange={(e) => setSyllabus([...syllabus, e.target.value])}/>
-                </Form.Group>
-                {children}
-                <Button block size="lg" onClick={test} style={{marginTop:"10px"}}>
-                    Add Chapter
-                </Button>
+
                 <Button block size="lg" type="submit" style={{marginTop:"10px"}}>
                     Post
                 </Button>

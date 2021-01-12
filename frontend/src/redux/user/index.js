@@ -9,6 +9,8 @@ import {
 const initialState = {
     users: [],
     isLoading: false,
+    watchlist: [],
+    myCourse:[],
 };
   
 const userReducer = (state = initialState, action) => {

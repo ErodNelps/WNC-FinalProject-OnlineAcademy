@@ -87,17 +87,6 @@ router.post("/register/sendOTP", async(req, res) => {
   });
 });
 
-router.post("/add-new-course", async (req, res) => {
-  try{
-      let {thumbnail, title, briefDes, fullDes, rating,rateCount,subCount,price,bonus,syllabus, status, views, createdAt, updatedAt, lecturer} = req.body;
-      const newCourse = new Course({thumbnail, title, briefDes, fullDes, rating,rateCount,subCount,price,bonus,syllabus, status, views, createdAt, updatedAt, lecturer});
-      const savedCourse = await newCourse.save();
-      res.json(savedCourse);
-  } catch (err) {
-      res.status(500).json({ error: err.message });
-  }
-
-})
 
 router.post("/admin/add-new-user", async (req, res)=>{
   try {

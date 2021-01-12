@@ -13,9 +13,9 @@ import CourseDetail from '../CourseItem/courseDetail'
 import UserContext from "./context/userContext";
 import './style.css'
 import AddNewCourse from '../Dashboard/addNewCourse';
-import MostViewed from '../MostViewed';
 import Search from '../layout/Search'
 import AddNewUser from '../Dashboard/addNewUser';
+import AddNewChapter from "../Dashboard/addNewChapter";
 function App() {
   const [userData, setUserData] = useState({
     token: undefined,
@@ -66,10 +66,10 @@ function App() {
                 <Route path="/dashboard"> <Dashboard/> </Route>
                 <Route path="/item"> <CourseDetail/> </Route>
                 <Route path="/addnewcourse"> <AddNewCourse/></Route>
-                <Route path="/most-viewed"><MostViewed></MostViewed></Route>
                 <Route path="/search"><Search></Search></Route>
                 <Route path="/course/:title"><CourseDetail></CourseDetail></Route>
                 <Route path="/addnewuser"><AddNewUser></AddNewUser></Route>
+                <Route path="/addchapter"><AddNewChapter></AddNewChapter></Route>
               </Switch>
               <WebFooter/>
             </div>

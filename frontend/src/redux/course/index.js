@@ -6,6 +6,8 @@ import {
   FETCH_COURSE,
   FETCH_COURSE_SELECT,
   FETCH_COURSE_MOST_VIEWED,
+  FETCH_COURSE_WEEK_HIGHLIGHT,
+  FETCH_COURSE_LATEST,
   SET_COURSE_LOADING,
   DEFAULT,
 } from '../actions/types';
@@ -31,6 +33,8 @@ import {
       lecturer:'',
     },
     mostViewed:[],
+    weekHighlight: [],
+    latest: [],
     isLoading: false,
   };
   
@@ -44,6 +48,10 @@ import {
         return { ...state, courseSelected: action.payload };
       case FETCH_COURSE_MOST_VIEWED:
         return { ...state, mostViewed: action.payload};
+      case FETCH_COURSE_WEEK_HIGHLIGHT:
+        return {...state, weekHighlight: action.payload};
+      case FETCH_COURSE_LATEST:
+        return {...state, latest: action.payload}
       case SET_COURSE_LOADING:
         return { ...state, isLoading: action.payload };
       default: return state;
@@ -52,7 +60,7 @@ import {
 
 export function fetchMostViewed () {
   return async (dispatch, getState) => {
-    dispatch({ type: SET_COURSE_LOADING, payload: true });
+    // dispatch({ type: SET_COURSE_LOADING, payload: true });
       try {
           const res = await Axios.get("http://localhost:8080/courses/most-viewed");
           let mostViewed = []
@@ -68,8 +76,51 @@ export function fetchMostViewed () {
           });
       } catch(error){
         handleError(error, dispatch);
-      } finally {
-        dispatch({ type: SET_COURSE_LOADING, payload: false });
+      } 
+      // finally {
+      //   dispatch({ type: SET_COURSE_LOADING, payload: false });
+      // }
+  }   
+}
+
+export function fetchHighLight () {
+  return async (dispatch, getState) => {
+      try {
+          const res = await Axios.get("http://localhost:8080/courses/highlight-this-week");
+          let highLight = []
+          for(var i in res.data){
+              var data = res.data[i];
+              highLight.push({_id: data._id, thumbnail: data.thumbnail, title: data.title, briefDes : data.briefDes, fullDes : data.fullDes, 
+                  rating : data.rating, rateCount: data.rateCount,subCount: data.subCount, price: data.price,
+                  bonus: data.bonus, syllabus: data.syllabus, status: data.status, views: data.views, createdAt: data.createdAt, updatedAt: data.updatedAt})
+          }
+          dispatch({
+              type: FETCH_COURSE_WEEK_HIGHLIGHT,
+              payload: highLight
+          });
+      } catch(error){
+        handleError(error, dispatch);
+      }
+  }   
+}
+
+export function fetchLatest () {
+  return async (dispatch, getState) => {
+      try {
+          const res = await Axios.get("http://localhost:8080/courses/latest");
+          let latest = []
+          for(var i in res.data){
+              var data = res.data[i];
+              latest.push({_id: data._id, thumbnail: data.thumbnail, title: data.title, briefDes : data.briefDes, fullDes : data.fullDes, 
+                  rating : data.rating, rateCount: data.rateCount,subCount: data.subCount, price: data.price,
+                  bonus: data.bonus, syllabus: data.syllabus, status: data.status, views: data.views, createdAt: data.createdAt, updatedAt: data.updatedAt})
+          }
+          dispatch({
+              type: FETCH_COURSE_LATEST,
+              payload: latest
+          });
+      } catch(error){
+        handleError(error, dispatch);
       }
   }   
 }
