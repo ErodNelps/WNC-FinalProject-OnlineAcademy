@@ -34,4 +34,5 @@ mongoose.connect(
 
 app.use("/users", require("./routes/userRouter"));
 app.use("/courses", require("./routes/courseRouter"));
-app.use("/category", require("./routes/categoryRouter"))
+app.use("/category", require("./routes/categoryRouter"));
+app.use("/student", require("./routes/studentCourseRouter"))

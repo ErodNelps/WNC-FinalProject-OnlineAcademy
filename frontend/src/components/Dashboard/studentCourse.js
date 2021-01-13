@@ -1,111 +1,105 @@
 import React, { useContext, useEffect, useState } from 'react'
 import 'materialize-css'
-import Axios from 'axios'
-import {Tab, Tabs, Collection, CollectionItem} from 'react-materialize'
+import {Tab, Tabs, Table, Button} from 'react-materialize'
 import userContext from '../App/context/userContext'
-
-export default function StudentCourse(){
+import {connect} from 'react-redux'
+import {fetchStudentSubList, fetchStudentWatchlist} from '../../redux/user'
+import store from '../../redux/store'
+const StudentCourse = ({watchList=[], subList = []}) => {
     const { userData } = useContext(userContext);
-    const [wishList, setWishList] = useState([]);
-    const [subList, setSubList] = useState([]);
 
     useEffect(() => {
-        async function fetchSubs() {
-            try {
-                const res = await Axios.get("http://localhost:8080/watchlist");
-                console.log(res.data);
-                setWishList(res.data)
-            } catch(err){
-                throw new Error(`HTTP error! status: ` + err.message);
-            }   
-        }
-
-        async function fetchWatchList() {
-            try {
-                const res = await Axios.get("http://localhost:8080/subcription");
-                console.log(res.data);
-                setWishList(res.data)
-            } catch(err){
-                throw new Error(`HTTP error! status: ` + err.message);
-            }   
-        }
-        
-        fetchWatchList();
-        fetchSubs();
+        store.dispatch(fetchStudentWatchlist(userData.user.id))
+        store.dispatch(fetchStudentSubList(userData.user.id))
     },[]);
 
     return(
         <Tabs className="tabs z-depth-1">
-            <>{userData.user ? (<><Tab active className="tab"
-                options={{
-                duration: 300,
-                onShow: null,
-                responsiveThreshold: Infinity,
-                swipeable: false
-                }}
-                title="Subcription">
-                <Collection> 
-                    {wishList.map(item => {
-                        return (
-                            <CollectionItem className="avatar">
-                                <img
-                                alt=""
-                                className="circle"
-                                src="https://materializecss.com/images/yuna.jpg"
-                                />
-                                <span className="title">
-                                {item.title}
-                                </span>
-                                <p>
-                                First Line 
-                                <br />
-                                Second Line
-                                </p>
-                                <a
-                                className="secondary-content"
-                                href="javascript:void(0)"
-                                >
-                                </a>
-                            </CollectionItem>
-                        )})}
-                    </Collection>
-            </Tab>
-            <Tab className="tab"
-                options={{
-                duration: 300,
-                onShow: null,
-                responsiveThreshold: Infinity,
-                swipeable: false
-                }}
-                title="Watchlist">
-                    <Collection> 
-                    {wishList.map(item => {
-                        return (
-                            <CollectionItem className="avatar">
-                                <img
-                                alt=""
-                                className="circle"
-                                src="https://materializecss.com/images/yuna.jpg"
-                                />
-                                <span className="title">
-                                {item.title}
-                                </span>
-                                <p>
-                                First Line 
-                                <br />
-                                Second Line
-                                </p>
-                                <a
-                                className="secondary-content"
-                                href="javascript:void(0)"
-                                >
-                                </a>
-                            </CollectionItem>
-                        )})} 
-                    </Collection>
-                
-            </Tab></>   ) : <></>} </>
+            <Tab className="tab" active
+                    options={{
+                    duration: 300,
+                    onShow: null,
+                    responsiveThreshold: Infinity,
+                    swipeable: false
+                    }}
+                    title="Watchlist">
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th data-field="id">
+                                    Name
+                                </th>
+                                <th data-field="name">
+                                    Subcription count
+                                </th>
+                                <th data-field="price">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {watchList ? 
+                            (<>{watchList.map((course, index) => (<tr key={index}>
+                                <td>
+                                    {course.title}
+                                </td>
+                                <td>
+                                    {course.subCount}
+                                </td>
+                                <td>
+                                   <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
+                                </td>
+                            </tr>))}</>) : <></>}
+                        </tbody>
+                    </Table>
+                </Tab>
+                <Tab className="tab"
+                    options={{
+                    duration: 300,
+                    onShow: null,
+                    responsiveThreshold: Infinity,
+                    swipeable: false
+                    }}
+                    title="Subcription">
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th data-field="id">
+                                    Name
+                                </th>
+                                <th data-field="name">
+                                    Subcription count
+                                </th>
+                                <th data-field="price">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {subList ? 
+                            (<>{subList.map((course, index) => (<tr key={index}>
+                                <td>
+                                    {course.title}
+                                </td>
+                                <td>
+                                    {course.subCount}
+                                </td>
+                                <td>
+                                   <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
+                                </td>
+                            </tr>))}</>) : <></>}
+                        </tbody>
+                    </Table>
+                </Tab>
             
         </Tabs>
     )    
 }
+
+const mapStateToProps = state => {
+    const watchList = state.userReducer.watchList;
+    const subList = state.userReducer.subList;
+    return {
+        watchList, subList
+    }
+}
+
+export default connect(mapStateToProps)(StudentCourse)

@@ -8,8 +8,5 @@ const userSchema = new mongoose.Schema({
   role: { type: String, required: true },
 });
 
-const watchListSchema = new mongoose.Schema({
-  studentID: {}
-})
 
 module.exports = User = mongoose.model("user", userSchema);

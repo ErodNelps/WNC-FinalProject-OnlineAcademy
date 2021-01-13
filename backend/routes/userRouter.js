@@ -6,6 +6,8 @@ const User = require("../model/userModel");
 const passport = require("passport");
 const nodemailer = require("nodemailer");
 
+
+
 var genOTP = Math.random();
 genOTP = genOTP * 1000000;
 genOTP = parseInt(genOTP);
@@ -129,6 +131,7 @@ router.post("/admin/add-new-user", async (req, res)=>{
     res.status(500).json({ error: err.message });
   }
 });
+
 
 router.post("/register/resendOTP", async(req, res) => {
   let {email} = req.body;
@@ -254,5 +257,7 @@ router.get("/auth/google/callback",
       res.redirect("http://localhost:3000?token=" + token);
   }
 );
+
+//watchlist
 
 module.exports = router;
