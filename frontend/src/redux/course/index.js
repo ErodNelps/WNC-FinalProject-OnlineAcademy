@@ -137,6 +137,7 @@ export function fetchAllCourse () {
                   rating : data.rating, rateCount: data.rateCount,subCount: data.subCount, price: data.price,
                   bonus: data.bonus, syllabus: data.syllabus, status: data.status, views: data.views, createdAt: data.createdAt, updatedAt: data.updatedAt})
           }
+          
           dispatch({
               type: FETCH_COURSES,
               payload: courses

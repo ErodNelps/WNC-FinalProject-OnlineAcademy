@@ -33,18 +33,16 @@ router.post('/add', (req, res) => {
   });
   
   // fetch all categories api
-  router.get('/list', (req, res) => {
-    Category.find({}, (err, data) => {
-      if (err) {
-        return res.status(400).json({
-          error: 'Your request could not be processed. Please try again.'
-        });
-      }
-      res.status(200).json({
-        categories: data
+router.get("/get-all-category", async (req, res) => {
+  await Category.find({}, (err, data) => {
+    if (err) {
+      return res.status(400).json({
+        error: 'Your request could not be processed. Please try again.'
       });
-    });
+    }
+    res.status(200).json(data);
   });
+});
   
   router.delete('/delete/:id',(req, res) => {
       Category.deleteOne({ _id: req.params.id }, (err, data) => {
