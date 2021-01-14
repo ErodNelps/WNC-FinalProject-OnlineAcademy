@@ -3,6 +3,7 @@ import 'materialize-css'
 import {Tab, Tabs, Table, Button} from 'react-materialize'
 import userContext from '../App/context/userContext'
 import {connect} from 'react-redux'
+import { Link } from 'react-router-dom'
 import {fetchStudentSubList, fetchStudentWatchlist} from '../../redux/user'
 import store from '../../redux/store'
 const StudentCourse = ({watchList=[], subList = []}) => {
@@ -40,7 +41,7 @@ const StudentCourse = ({watchList=[], subList = []}) => {
                         {watchList ? 
                             (<>{watchList.map((course, index) => (<tr key={index}>
                                 <td>
-                                    {course.title}
+                                    <Link key="1" to={"/course/"+ course._id}>{course.title}</Link>
                                 </td>
                                 <td>
                                     {course.subCount}
@@ -77,7 +78,7 @@ const StudentCourse = ({watchList=[], subList = []}) => {
                         {subList ? 
                             (<>{subList.map((course, index) => (<tr key={index}>
                                 <td>
-                                    {course.title}
+                                    <Link key="1" to={"/course/"+ course._id}>{course.title}</Link>
                                 </td>
                                 <td>
                                     {course.subCount}

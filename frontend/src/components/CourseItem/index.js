@@ -1,5 +1,6 @@
 import React from 'react';
 import 'materialize-css'
+import {Link} from 'react-router-dom'
 import { Icon, Col, Card, CardTitle, Preloader} from 'react-materialize'
 import './style.css'
 import Axios from 'axios';
@@ -16,7 +17,7 @@ export default function CourseItem({course}) {
             <div  style={{ cursor: 'pointer', marginRight: "10px"}}>
                 <Col m={6} s={12}>
                 <Card
-                actions={[<a key="1" href={"/course/"+course._id} onClick={handleClick}>Go to course</a>]}
+                actions={[<Link key="1" to={"/course/"+course._id} onClick={handleClick}>Go to course</Link>]}
                 closeIcon={<Icon>close</Icon>}
                 header={<img className="detail-thumbnail" src={course.thumbnail} width="100" height="100"></img>}
                 horizontal

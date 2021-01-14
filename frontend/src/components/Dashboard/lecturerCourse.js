@@ -49,7 +49,7 @@ const LecturerCourse = ({lecturerCourse = []}) =>{
                         {lecturerCourse ? 
                             (<>{lecturerCourse.map((course, index) => (<tr key={index}>
                                 <td>
-                                    {course.title}
+                                <Link key="1" to={"/course/"+ course._id}>{course.title}</Link>
                                 </td>
                                 <td>
                                     {course.subCount}

@@ -180,6 +180,7 @@ router.post("/login", async (req, res) => {
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
+        role: user.role
       },
     });
   } catch (err) {
@@ -245,6 +246,27 @@ router.get("/", auth, async (req, res) => {
     role: user.role,
   });
 });
+
+router.get("/:id", async (req, res) => {
+  const user = await User.findOne({_id: req.params.id});
+  res.json({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email:user.email,
+    id: user._id
+  });
+});
+
+// router.get("/course/:id", auth, async (req, res) => {
+//   const user = await User.findById(req.user);
+//   res.json({
+//     firstName: user.firstName,
+//     lastName: user.lastName,
+//     email:user.email,
+//     id: user._id,
+//     role: user.role,
+//   });
+// });
 
 router.get("/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })

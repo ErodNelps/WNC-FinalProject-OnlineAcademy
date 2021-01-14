@@ -3,8 +3,6 @@ import { useHistory } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Axios from "axios";
-import userContext from "../App/context/userContext";
-import {Divider ,Dropdown} from 'react-materialize';
 import 'materialize-css';
 
 export default function AddNewUser() {

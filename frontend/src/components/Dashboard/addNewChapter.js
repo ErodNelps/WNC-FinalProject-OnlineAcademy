@@ -1,68 +1,124 @@
-import React, {useState, useContext, useEffect, useRef} from "react";
+import React, {useState, useContext, useEffect, useRef, useMemo} from "react";
+import {useDropzone} from 'react-dropzone';
 import Button from 'react-bootstrap/Button'
 import 'react-quill/dist/quill.snow.css';
 import userContext from "../App/context/userContext";
-import {TextInput} from "react-materialize";
 import './style.css'
-import {Form} from "react-bootstrap";
 import Axios from "axios";
+import { ProgressBar } from "react-materialize";
+import 'materialize-css'
+
 export default function AddNewChapter(){
     const {userData} = useContext(userContext);
-    const [createdAt, setCreatedAt] = useState('');
-    const [numVideo, setNumVideo] = useState(0);
+    const [uploading, setuploading] = useState(false)
     const children = [];
+    const {
+        acceptedFiles,
+        getRootProps,
+        getInputProps,
+        isDragActive,
+        isDragAccept,
+        isDragReject
+    } = useDropzone({accept: 'video/*', enctype: "multipart/form-data", name: "chapter"});
+    
+    const style = useMemo(() => ({
+        ...baseStyle,
+        ...(isDragActive ? activeStyle : {}),
+        ...(isDragAccept ? acceptStyle : {}),
+        ...(isDragReject ? rejectStyle : {})
+        }), [
+        isDragActive,
+        isDragReject,
+        isDragAccept
+    ]);
+
+    const acceptedFileItems = acceptedFiles.map(file => (
+        <li key={file.path}>
+          {file.path} - {Math.ceil(file.size/1024)} KB
+        </li>
+      ));
     useEffect(() => {
-        setCreatedAt(getCurrentDate());
     })
 
-    const c1Ref = useRef(null);
+    const chapterRef = useRef(null);
 
-    for (var i = 0; i < numVideo; i += 1) {
-        children.push(<TextInput id={i} type="file" label={`Chapter ${i + 2}`}/>);
-    };
+    // for (var i = 0; i < numVideo; i += 1) {
+    //     children.push(<TextInput id={i} type="file" label={`Chapter ${i + 2}`}/>);
+    // };
 
-    const onAddChild = () => {
-        setNumVideo(numVideo + 1)
-    }
+    // const onAddChild = () => {
+    //     setNumVideo(numVideo + 1)
+    // }
 
     const handleSubmit = async (event) =>{
         event.preventDefault();
-
+        if(!userData.user){
+            return
+        }
+        setuploading(true)
         try {
             const data = new FormData()
-            data.append("chap_1", c1Ref.current.files[0])
-            await Axios.post("http://localhost:8080/courses/testFile", data).then((res =>{
-                
+
+            acceptedFiles.forEach(file => {
+                data.append("chapter", file)
+            })
+
+            Axios.post("http://localhost:8080/courses/add-chapter/upload", data).then((res =>{
+                setuploading(false)
+                alert("Chapter added")
             }))
-            // await Axios.post(
-            //     "http://localhost:8080/users/add-new-course",
-            //     newCourse
-            // ).then((res) => {
-            //     alert("New course posted successfully!")
-            // });
 
         } catch (err) {
             alert(err)
-            // alert(err.response.data.msg);
+            setuploading(false)
         }
-    }
-
-    const getCurrentDate = () => {
-        var today = new Date();
-        return today.toLocaleString()
+        
     }
 
     return (
-        <div className="Login">
-            {/*<TextInput id="1" ref={(ref) => c1Ref.current = ref} label="1" type="file" label="Chapter 1:"/>*/}
-            <input id={"1"} type={"file"} ref={c1Ref}/>
-            {children}
-            <Button block size="lg" onClick={onAddChild} style={{marginTop:"10px"}}>
-                Add Chapter
-            </Button>
+        <section className="container">
+            {/* {children} */}
+            <div {...getRootProps({style})}>
+                <input {...getInputProps()} />
+                <p>Drag & drop your videos here, or click to select files</p>
+            </div>
+            <aside>
+                <h5>Accepted videos</h5>
+                <ul>{acceptedFileItems}</ul>
+            </aside>
+            {uploading? <ProgressBar />: <></>}
             <Button block size={"lg"} onClick={(e) => handleSubmit(e)}>
-                Submit
+                Upload
             </Button>
-        </div>
+        </section>
     )
 }
+
+const baseStyle = {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    borderWidth: 2,
+    borderRadius: 2,
+    borderColor: '#eeeeee',
+    borderStyle: 'dashed',
+    backgroundColor: '#fafafa',
+    color: '#bdbdbd',
+    outline: 'none',
+    transition: 'border .24s ease-in-out'
+  };
+  
+  const activeStyle = {
+    borderColor: '#2196f3'
+  };
+  
+  const acceptStyle = {
+    borderColor: '#00e676'
+  };
+  
+  const rejectStyle = {
+    borderColor: '#ff1744'
+  };
+  

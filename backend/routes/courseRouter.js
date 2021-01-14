@@ -1,8 +1,12 @@
 const router = require("express").Router();
 const Course = require("../model/courseModel")
+const Category = require("../model/categoryModel")
+const CategoryCourse = require("../model/categoryCourseModel")
+const Media = require("../model/mediaModel")
 const multer = require("multer")
 const fs = require('fs');
-const { encode } = require("punycode");
+
+
 var currentImg = null;
 var mimetype = null;
 const videoStorage = multer.diskStorage({
@@ -27,22 +31,33 @@ const videoStorage = multer.diskStorage({
     storage: imageStorage
  });
 
-router.post("/testFile", videoUpload.single("chap_1"), async(req, res) => {
-    const file = req.file
-
+router.post("/:id/add-chapter/upload", videoUpload.array("chapter", 10), async(req, res) => {
+    const files = req.files
     try {
-        res.json(file.path)
-    } catch (error) {
+        for (i = 0; i<files.length; i++) {
+            var newVideo = new Media({
+                courseID: req.params.id,
+                url: files[i].path,
+                name: files[i].originalname
+            })
+
+            newVideo.save(function (err) {
+                if (err) 
+                    return console.error(err);
+                    else console.log("saved")
+            });;
+        };
+        res.status(200).json(files)
+    } catch (err) {
         res.status(500).json({ error: err.message });
     } 
 })
 
-router.post("/upload-image", imageUpload.single("thumbnail"), async(req, res) => {
+router.post("/upload-image", imageUpload.single("chapter"), async(req, res) => {
     const file = req.file
     mimetype = file.mimetype;
-    currentImg = file;
+    currentImg = file;  
     res.json(currentImg)
-     //console.log(finalImg);
 })
 
 router.post("/add-new-course/:lect_id", async (req, res) => {
@@ -60,8 +75,36 @@ router.post("/add-new-course/:lect_id", async (req, res) => {
     }
   
 })
-  
+
+router.get("/search", async (req, res) => {
+    try{
+        const searchResults = await Course.find({
+            '$search': {
+              'index': 'title', 
+              'text': {
+                'query': req.params.searchText, 
+                'path': 'title'
+              }
+            }
+          }).sort('-views').limit(10);
+        res.json(searchResults);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get("/catsearch", async (req, res) => {
+    try{
+        const searchResults = await CategoryCourse.find({cat: req.query.searchtext});
+        console.log(searchResults)
+        res.json(searchResults);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 router.get("/most-viewed", async (req, res) => {
+
     try{
         const mostViewedCourse = await Course.find({}).sort('-views').limit(10);
         res.json(mostViewedCourse);

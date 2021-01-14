@@ -3,7 +3,7 @@ const User = require('../model/userModel');
 const WatchList = require('../model/studentCourseModel');
 const Course = require('../model/courseModel');
 const mongoose = require('mongoose');
-
+const auth = require('../middleware/auth')
 router.post("/addToWishList", (req, res) => {
     User.findOne({_id: req.body.id}, (err, user) => {
   
@@ -60,7 +60,7 @@ router.get("/:id/get-student-watchlist", async(req, res) => {
     }
 })
 
-router.get("/:id/get-student-subcription", async(req, res) => {
+router.get("/:id/get-student-subscription", async(req, res) => {
     const studentID = req.params.id;
     var subListID = [];
     var idList = [];
@@ -90,20 +90,66 @@ router.get("/:id/get-lecturer-course", async(req, res) => {
     }
 })
 
+router.get("/check-subbed", async (req, res) => {
+    try{
+        const courses = await WatchList.findOne({courseID:req.query.courseid, studentID: req.query.userid, action: "subscribed"});
+        res.json(courses);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get("/check-watched", async (req, res) => {
+    try{
+        const courses = await WatchList.findOne({courseID:req.query.courseid, studentID: req.query.userid, action: "watchlist"});
+        res.json(courses);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get("/check-my-course", async (req, res) => {
+    try{
+        const course = await Course.findOne({courseID:req.query.courseid, lecturer: req.query.userid});
+        res.json(course);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post("/add-to-watchlist", async (req, res) => {
+    let {userID, courseID, action} = req.body;
+    try{
+        const watchlist = new WatchList({
+            courseID,
+            studentID: userID,
+            action
+        });
+        const savedWatchList = watchlist.save()
+        res.json(savedWatchList);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post("/subscribe", async (req, res) => {
+    let {userID, courseID, action} = req.body;
+    console.log(req.body)
+    try{
+        const watchlist = new WatchList({
+            courseID,
+            studentID: userID,
+            action
+        });
+        const savedWatchList = subscription.save()
+        res.json(savedWatchList);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 router.get('/removeWishList', (req, res) => {
 
-User.findOneAndUpdate(
-    {_id: req.query.userId},
-    {
-        "$pull":
-            {"WishList" : {"id" : req.query.productId}}
-    },
-    {new : true},
-    (err, userInfo) => {
-        if(err) return res.json({success:false, err});
-        res.status(200).json(userInfo.WishList)
-    }
-)
 });
 
 module.exports = router;

@@ -8,15 +8,20 @@ import './style.css'
 import {fetchAllCategory} from '../../redux/category'
 import {connect } from 'react-redux'
 import store from '../../redux/store'
+import { Link } from 'react-router-dom';
 
 const NavBar = ({categories = []}) => {
   const [searchText, setSearchText] = useState();
   useEffect(() => {
     store.dispatch(fetchAllCategory());
   }, [])
-  async function handleSubmit(event) {
-    event.preventDefault();
-  }
+
+  function keyPress(e){
+    if(e.charCode === 13){
+       console.log(e.target.value);
+       // put the login here
+    }
+ }
 
   return (
     <React.Fragment>
@@ -24,7 +29,7 @@ const NavBar = ({categories = []}) => {
         <Navbar
           alignLinks="right"
           className="nav-menu"
-          brand={<a className="brand-logo" href="/">Online Academy</a>}
+          brand={<Link className="brand-logo" to="/">Online Academy</Link>}
           id="mobile-nav"
           menuIcon={<Icon>menu</Icon>}
           options={{
@@ -39,13 +44,13 @@ const NavBar = ({categories = []}) => {
             preventScrolling: true
           }}>
           <Dropdown menuClassName="dropdown-menu" wrapperClassName="dropdown-wrapper" buttonClassName="dropdown-button" className="dropdown" title='Category'>
-            {categories ? <>{categories.map((category, index) => (
-            <Dropdown.Item className="dropdown-item" href="/" key={index} name={category.category}>{category.category}
-              <SubMenu subcats={category.subCategories}></SubMenu>
-            </Dropdown.Item>))}</> : <></>}
+            {categories ? <>{categories.map((category, index) => (<Link to={"/category/" +`${category.category}`}>
+              <Dropdown.Item className="dropdown-item"  key={index} name={category.category}>{category.category} 
+              <SubMenu subcats={category.subCategories} key={index}></SubMenu>
+            </Dropdown.Item></Link>))}</> : <></>}
           </Dropdown>
           <Form inline>
-              <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+              <FormControl type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search" className="mr-sm-2" onKeyDown={keyPress}/>
           </Form>
           <AuthOptions></AuthOptions>
         </Navbar>
@@ -58,13 +63,12 @@ function SubMenu({subcats = []}){
     return (
       <Dropdown.Submenu>
         {subcats.map((category, index) => (
-        <Dropdown.Item href="/" key={index} name={category.name}>{category.name}</Dropdown.Item>))}
+        <Link style={{backgroundColor: "transparent", color: "#111111"}} to={"/subcat/"+ `${category.name}`}><Dropdown.Item  key={index} name={category.name}>{category.name}</Dropdown.Item></Link>))}
       </Dropdown.Submenu>)
 }
 
 const mapStateToProps = state => {
   const categories =  state.categoryReducer.categories;
-  console.log(categories)
   return {
       categories
   }

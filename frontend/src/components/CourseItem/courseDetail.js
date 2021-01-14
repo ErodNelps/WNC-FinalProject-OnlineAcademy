@@ -5,22 +5,64 @@ import { connect } from 'react-redux'
 import './style.css'
 import userContext from '../App/context/userContext'
 import store from '../../redux/store'
-import { fetchCourseSeleccted } from '../../redux/course'
+import { checkIsSubbed, fetchCourseSeleccted, checkIsWatched, checkMyCourse, addWatchList, subscribeToCourse } from '../../redux/course'
 import { useHistory } from 'react-router-dom'
+import axios from 'axios'
 
-const CourseDetail = ({courseSelected}) =>{
+const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine}) =>{
     const {userData} = useContext(userContext);
     let history = useHistory()
     let id = history.location.pathname.replace('/course/','')
     useEffect(() =>{
         store.dispatch(fetchCourseSeleccted(id))
+        if(userData.user) {
+                store.dispatch(checkMyCourse(userData.user.id, id))
+                store.dispatch(checkIsSubbed(userData.user.id, id))
+                store.dispatch(checkIsWatched(userData.user.id, id))
+        }
     },[])
+    const handleAnynomous = () =>{
+        if(userData.user){
+
+        }
+        else{
+            alert("You have to log in!");
+        }
+    }
+
     const handleBuyBtn = () =>{
         if(userData.user){
 
         }
         else{
-            alert("You have to log in to buy a course!");
+            alert("You have to log in!");
+        }
+    }
+
+    const handleJoin = () =>{
+        if(userData.user){
+            store.dispatch(subscribeToCourse(userData.user.id, id))
+        }
+        else{
+            alert("You have to log in!");
+        }
+    }
+
+    const handleUnadded = () =>{
+        if(userData.user){
+
+        }
+        else{
+            alert("You have to log in!");
+        }
+    }
+
+    const handleWatchlist = async () =>{
+        if(userData.user){
+            store.dispatch(addWatchList(userData.user.id, id))
+        }
+        else{
+            alert("You have to log in!");
         }
     }
 
@@ -38,16 +80,29 @@ const CourseDetail = ({courseSelected}) =>{
                         <Row> <div className="course-name">{courseSelected.title}</div> </Row>
                         <Row><div>{courseSelected.briefDes}</div></Row>
                         <Row>Rating: {courseSelected.rating}</Row>
-                        <Button onClick={handleBuyBtn}>Buy course</Button>
+                        {/* {userData.user ? (<>{isSubbed ? <Button style={{marginLeft:"10px"}} onClick={handleJoin}>Join</Button>: <Button onClick={handleBuyBtn}>Buy course</Button>}</>) :
+                            <Button onClick={handleAnynomous}>Buy course</Button>}
+                        {userData.user ? (<>{isWatched? <Button style={{marginLeft:"10px"}} onClick={handleUnadded}>Added to watchlist</Button> : <Button onClick={handleWatchlist}>Watchlist</Button>}</>) :
+                            <></>} */}
+                        {userData.user ? <>{isMine ? <Button className="fa fa-pencil" onClick={handleBuyBtn} style={{marginLeft:"10px"}} ></Button> : 
+                                                        (<>{isSubbed ? <Button style={{marginLeft:"10px"}} onClick={handleJoin}>Joined</Button> : <Button onClick={handleBuyBtn} style={{marginLeft:"10px"}}>Join course</Button>}
+                                                        {isWatched ?  <Button style={{marginLeft:"10px"}} onClick={handleUnadded}>Added to Watchlist</Button> : <Button onClick={handleWatchlist} style={{marginLeft:"10px"}}>Add toWatchlist</Button>}</>)}
+                                        </> : <Button onClick={handleAnynomous} style={{marginLeft:"10px"}}>Join course</Button>}
                     </div>
                 </Col>
             </Row>
             <Divider/>
             <Row style={{marginTop:'20px', color: "floralwhite"}}>
-                <Col s={4} style={{textAlign:'center'}}>Last updated: </Col>
+                <Col s={4} style={{textAlign:'center'}}>Last updated: {courseSelected.updatedAt}</Col>
                 <Col s={4} style={{textAlign:'center'}}>Rating count: {courseSelected.rateCount}</Col>
                 <Col s={4} style={{textAlign:'center'}}>Paticipant: {courseSelected.subCount}</Col>
             </Row>
+            <Divider/>
+                <Row style={{marginTop:'20px', color: "floralwhite"}}>
+                    {courseSelected.lecturer.data ? 
+                    <><Col s={5} style={{textAlign:'center'}}>Lecturer: {courseSelected.lecturer.data.firstName} {courseSelected.lecturer.data.lastName}</Col>
+                    <Col s={5} style={{textAlign:'center'}}>Email: {courseSelected.lecturer.data.email}</Col></>: <></>}
+                </Row>
             <Divider/>
             <Row className="full-description">{courseSelected.fullDes}</Row>
             <Divider/></>) : <p>Course not found</p>}
@@ -57,7 +112,10 @@ const CourseDetail = ({courseSelected}) =>{
 
 const mapStateToProps = state =>{
     const courseSelected = state.courseReducer.courseSelected;
-    return {courseSelected}
+    const isSubbed = state.courseReducer.isSubbed;
+    const isWatched = state.courseReducer.isWatched;
+    const isMine = state.courseReducer.isMine;
+    return {courseSelected, isSubbed, isWatched, isMine}
 };
 
 export default connect (mapStateToProps)(CourseDetail)

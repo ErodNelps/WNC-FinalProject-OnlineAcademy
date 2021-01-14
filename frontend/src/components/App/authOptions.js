@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import UserContext from "./context/userContext";
 import {Button, Divider, Dropdown} from 'react-materialize'
 import 'materialize-css'
@@ -18,6 +18,7 @@ export default function AuthOptions() {
       user: undefined,
     });
     localStorage.setItem("auth-token", "");
+    history.push("/");
   };
 
   return (
@@ -42,7 +43,7 @@ export default function AuthOptions() {
         }}
         trigger={<a style={{display: "block" }}><img src="user-student.png" style={{ height:"45px", width: "45px"}}/></a>}
         >
-          <a href="/dashboard" >Dashboard</a>
+          <Link to="/dashboard" >Dashboard</Link>
           <a onClick={logout} >Log out</a>
         <Divider></Divider>
       </Dropdown>

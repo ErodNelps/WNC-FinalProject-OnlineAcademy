@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
-import UserContext from "../App/context/userContext";
 import Axios from "axios";
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css';
@@ -43,9 +42,9 @@ export default function AddNewCourse(){
                 alert("New course posted successfully!")
                 history.push("/dashboard")
             })
-            });
+        });
             
-          } catch (err) {
+        } catch (err) {
             alert(err.response.data.msg);
         }
     }
