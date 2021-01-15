@@ -1,15 +1,15 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import 'materialize-css'
 import { Row, Col, Divider, Button} from 'react-materialize'
 import { connect } from 'react-redux'
 import './style.css'
 import userContext from '../App/context/userContext'
 import store from '../../redux/store'
-import { checkIsSubbed, fetchCourseSeleccted, checkIsWatched, checkMyCourse, addWatchList, subscribeToCourse } from '../../redux/course'
+import { checkIsSubbed, fetchCourseSeleccted, checkIsWatched, checkMyCourse, addWatchList, subscribeToCourse, fetchSyllabus } from '../../redux/course'
 import { useHistory } from 'react-router-dom'
-import axios from 'axios'
+import ReactPlayer from 'react-player'
 
-const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine}) =>{
+const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = []}) =>{
     const {userData} = useContext(userContext);
     let history = useHistory()
     let id = history.location.pathname.replace('/course/','')
@@ -19,6 +19,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine}) =>{
                 store.dispatch(checkMyCourse(userData.user.id, id))
                 store.dispatch(checkIsSubbed(userData.user.id, id))
                 store.dispatch(checkIsWatched(userData.user.id, id))
+                store.dispatch(fetchSyllabus(id))
         }
     },[])
     const handleAnynomous = () =>{
@@ -66,6 +67,11 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine}) =>{
         }
     }
 
+    const [vidID, setVID] = useState(null);
+    const fetchMedia = (id) => {
+        setVID(id);
+    }
+
     return(
         <div className="course-detail">
             {courseSelected ? 
@@ -105,6 +111,14 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine}) =>{
                 </Row>
             <Divider/>
             <Row className="full-description">{courseSelected.fullDes}</Row>
+            <Divider/>
+            <Row className="full-description"><ul>{syllabus ? <>{syllabus.map((vid) => (
+                       <li onClick={() => fetchMedia(vid.id)} key={vid.name}>
+                       {vid.name}
+                       
+                     </li>
+            ))}</> : <></>}</ul></Row>
+            {vidID ? <ReactPlayer url={"http://localhost:8080/media/vid/" + vidID} ></ReactPlayer> : <></>}
             <Divider/></>) : <p>Course not found</p>}
         </div>
     )
@@ -115,7 +129,9 @@ const mapStateToProps = state =>{
     const isSubbed = state.courseReducer.isSubbed;
     const isWatched = state.courseReducer.isWatched;
     const isMine = state.courseReducer.isMine;
-    return {courseSelected, isSubbed, isWatched, isMine}
+    const syllabus = state.courseReducer.syllabus;
+
+    return {courseSelected, isSubbed, isWatched, isMine, syllabus}
 };
 
 export default connect (mapStateToProps)(CourseDetail)

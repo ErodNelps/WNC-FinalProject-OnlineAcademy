@@ -7,7 +7,7 @@ import {connect } from 'react-redux'
 import store from '../../redux/store'
 import { fetchSearchResults } from '../../redux/course';
 const Search = ({searchResult = []})=> {
-
+    
     useEffect(() => {
        store.dispatch(fetchSearchResults())
     }, []);

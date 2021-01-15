@@ -1,4 +1,5 @@
 import React, {useState, useContext, useEffect, useRef, useMemo} from "react";
+import {useHistory} from 'react-router-dom'
 import {useDropzone} from 'react-dropzone';
 import Button from 'react-bootstrap/Button'
 import 'react-quill/dist/quill.snow.css';
@@ -11,6 +12,8 @@ import 'materialize-css'
 export default function AddNewChapter(){
     const {userData} = useContext(userContext);
     const [uploading, setuploading] = useState(false)
+    let history = useHistory()
+    let id = history.location.pathname.replace('/addchapter','')
     const children = [];
     const {
         acceptedFiles,
@@ -63,7 +66,7 @@ export default function AddNewChapter(){
                 data.append("chapter", file)
             })
 
-            Axios.post("http://localhost:8080/courses/add-chapter/upload", data).then((res =>{
+            Axios.post("http://localhost:8080/courses/add-chapter/upload/" + id, data).then((res =>{
                 setuploading(false)
                 alert("Chapter added")
             }))
