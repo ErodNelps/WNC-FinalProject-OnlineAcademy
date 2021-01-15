@@ -174,6 +174,7 @@ export function fetchSyllabus (id) {
               var data = res.data[i];
               results.push({id: data._id, courseID: data.courseID, url:data.url, name: data.name})
           }
+          console.log(results)
           dispatch({
               type: FETCH_SYLLABUS,
               payload: results

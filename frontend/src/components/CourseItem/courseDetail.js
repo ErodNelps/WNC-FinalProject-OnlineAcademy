@@ -67,7 +67,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
         }
     }
 
-    const [vidID, setVID] = useState();
+    const [vidID, setVID] = useState(null);
     const fetchMedia = (id) => {
         setVID(id);
     }
@@ -112,12 +112,12 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
             <Divider/>
             <Row className="full-description">{courseSelected.fullDes}</Row>
             <Divider/>
-            <Row className="full-description"><ul>{syllabus.map((vid, index) => {
-                       <li onClick={fetchMedia(vid.id)} key={vid.name}>
+            <Row className="full-description"><ul>{syllabus ? <>{syllabus.map((vid) => (
+                       <li onClick={() => fetchMedia(vid.id)} key={vid.name}>
                        {vid.name}
                        
                      </li>
-            })}</ul></Row>
+            ))}</> : <></>}</ul></Row>
             {vidID ? <ReactPlayer url={"http://localhost:8080/media/vid/" + vidID} ></ReactPlayer> : <></>}
             <Divider/></>) : <p>Course not found</p>}
         </div>
@@ -130,6 +130,7 @@ const mapStateToProps = state =>{
     const isWatched = state.courseReducer.isWatched;
     const isMine = state.courseReducer.isMine;
     const syllabus = state.courseReducer.syllabus;
+
     return {courseSelected, isSubbed, isWatched, isMine, syllabus}
 };
 
