@@ -1,41 +1,76 @@
-import React from 'react'
+import React, {useContext, useEffect} from 'react'
 import 'materialize-css'
-import {Tab, Tabs, Button} from 'react-materialize'
+import {Tab, Tabs, Button, Table} from 'react-materialize'
 import { Link } from 'react-router-dom'
+import {fetchLecturerCourse} from '../../redux/user'
+import {connect } from 'react-redux'
+import store from '../../redux/store'
+import userContext from '../App/context/userContext'
 
-export default function LecturerCourse(){
+const LecturerCourse = ({lecturerCourse = []}) =>{
+    const { userData } = useContext(userContext);
+
+    useEffect(() => {
+        store.dispatch(fetchLecturerCourse(userData.user.id))
+    },[]);
     const handleAddCourse = () =>{
 
     }
 
     return(
         <>
-        <Link to="/addnewcourse">
-            <Button onclick={handleAddCourse}>Post new course</Button>
-        </Link>
+        
         <Tabs className="tabs z-depth-1">
-            <Tab className="tab"
-                options={{
-                duration: 300,
-                onShow: null,
-                responsiveThreshold: Infinity,
-                swipeable: false
-                }}
-                title="Đăng kí">
-                Khóa học của tôi
-            </Tab>
-            <Tab className="tab"
-                active
-                options={{
-                duration: 300,
-                onShow: null,
-                responsiveThreshold: Infinity,
-                swipeable: false
-                }}
-                title="Watchlist">
-                Watchlist
-            </Tab>
+        <Tab className="tab" active
+                    options={{
+                    duration: 300,
+                    onShow: null,
+                    responsiveThreshold: Infinity,
+                    swipeable: false
+                    }}
+                    title="My course">
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th data-field="id">
+                                    Name
+                                </th>
+                                <th data-field="name">
+                                    Subcription count
+                                </th>
+                                <th data-field="price">
+                                <Link to="/addnewcourse">
+                                    <Button onclick={handleAddCourse}>Post new course</Button>
+                                </Link>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {lecturerCourse ? 
+                            (<>{lecturerCourse.map((course, index) => (<tr key={index}>
+                                <td>
+                                <Link key="1" to={"/course/"+ course._id}>{course.title}</Link>
+                                </td>
+                                <td>
+                                    {course.subCount}
+                                </td>
+                                <td>
+                                   <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
+                                </td>
+                            </tr>))}</>) : <></>}
+                        </tbody>
+                    </Table>
+                </Tab>
         </Tabs>
         </>
     )    
 }
+
+const mapStateToProps = state => {
+    const lecturerCourse = state.userReducer.lecturerCourse;
+    return {
+         lecturerCourse
+    }
+}
+
+export default connect(mapStateToProps)(LecturerCourse)

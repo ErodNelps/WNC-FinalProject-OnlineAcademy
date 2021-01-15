@@ -6,3 +6,9 @@
 .tab{
     color: floralwhite;
 }
+
+.container {
+    margin-top: 50px;
+    background-color: floralwhite;
+    padding: 10px;
+}

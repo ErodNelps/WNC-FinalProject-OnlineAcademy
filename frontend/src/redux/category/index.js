@@ -6,7 +6,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  category: [],
+  categories: [],
   selectedCategory: {},
   courseSelected: [],
 };
@@ -14,28 +14,34 @@ const initialState = {
 const categoryReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_CATEGORY:
-      return { ...state, category: action.payload};
+      return { ...state, categories: action.payload};
     default: return state;
   }
 };
 
 
-
-
 export function fetchAllCategory () {
   return async (dispatch, getState) => {
-    dispatch({ type: SET_COURSE_LOADING, payload: true });
       try {
-         
-          dispatch({
-              type: FETCH_COURSE_MOST_VIEWED,
-              payload: null
-          });
+        const res = await Axios.get("http://localhost:8080/category/get-all-category");
+        let categories = []
+        for(var i in res.data){
+            var data = res.data[i];
+            var subRes = await Axios.get("http://localhost:8080/subcategory/get-subcategory/" + data._id);
+            var sub =[];
+            for(var j in subRes.data){
+              var subdata = subRes.data[j];
+              sub.push({name: subdata.name});
+            }
+            categories.push({_id: data._id, category: data.category, subCategories: sub});
+        }
+        dispatch({
+            type: FETCH_CATEGORY,
+            payload: categories
+        });
           
       } catch(error){
         handleError(error, dispatch);
-      } finally {
-        dispatch({ type: SET_COURSE_LOADING, payload: false });
       }
   }   
 }

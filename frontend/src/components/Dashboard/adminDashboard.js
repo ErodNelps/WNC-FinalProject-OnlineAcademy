@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import 'materialize-css'
 import { Tabs, Tab, Table, Button } from 'react-materialize'
-
+import { Link } from 'react-router-dom'
 import './style.css'
 import {fetchAllUser} from '../../redux/user'
 import {fetchAllCourse} from '../../redux/course'
@@ -44,7 +44,7 @@ const AdminDashboard = ({users = [], courses = [] }) =>{
                                     Category name
                                 </td>
                                 <td>
-                                    Eclair
+                                    Sub-cat
                                 </td>
                                 <td>
                                    
@@ -80,7 +80,7 @@ const AdminDashboard = ({users = [], courses = [] }) =>{
                         {courses ? 
                             (<>{courses.map((course, index) => (<tr key={index}>
                                 <td>
-                                    {course.title}
+                                    <Link key="1" to={"/course/"+ course._id}>{course.title}</Link>
                                 </td>
                                 <td>
                                     {course.subCount}

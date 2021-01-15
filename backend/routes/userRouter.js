@@ -6,6 +6,8 @@ const User = require("../model/userModel");
 const passport = require("passport");
 const nodemailer = require("nodemailer");
 
+
+
 var genOTP = Math.random();
 genOTP = genOTP * 1000000;
 genOTP = parseInt(genOTP);
@@ -87,17 +89,6 @@ router.post("/register/sendOTP", async(req, res) => {
   });
 });
 
-router.post("/add-new-course", async (req, res) => {
-  try{
-      let {thumbnail, title, briefDes, fullDes, rating,rateCount,subCount,price,bonus,syllabus, status, views, createdAt, updatedAt, lecturer} = req.body;
-      const newCourse = new Course({thumbnail, title, briefDes, fullDes, rating,rateCount,subCount,price,bonus,syllabus, status, views, createdAt, updatedAt, lecturer});
-      const savedCourse = await newCourse.save();
-      res.json(savedCourse);
-  } catch (err) {
-      res.status(500).json({ error: err.message });
-  }
-
-})
 
 router.post("/admin/add-new-user", async (req, res)=>{
   try {
@@ -140,6 +131,7 @@ router.post("/admin/add-new-user", async (req, res)=>{
     res.status(500).json({ error: err.message });
   }
 });
+
 
 router.post("/register/resendOTP", async(req, res) => {
   let {email} = req.body;
@@ -188,6 +180,7 @@ router.post("/login", async (req, res) => {
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
+        role: user.role
       },
     });
   } catch (err) {
@@ -254,6 +247,27 @@ router.get("/", auth, async (req, res) => {
   });
 });
 
+router.get("/:id", async (req, res) => {
+  const user = await User.findOne({_id: req.params.id});
+  res.json({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email:user.email,
+    id: user._id
+  });
+});
+
+// router.get("/course/:id", auth, async (req, res) => {
+//   const user = await User.findById(req.user);
+//   res.json({
+//     firstName: user.firstName,
+//     lastName: user.lastName,
+//     email:user.email,
+//     id: user._id,
+//     role: user.role,
+//   });
+// });
+
 router.get("/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
@@ -265,5 +279,7 @@ router.get("/auth/google/callback",
       res.redirect("http://localhost:3000?token=" + token);
   }
 );
+
+//watchlist
 
 module.exports = router;

@@ -25,6 +25,32 @@
     display: none;
 }
 
-.dropdown {
-    
+.dropdown{
+    position: absolute;
+    display: block;
+}
+
+.dropdown-menu {
+    position: absolute;
+    display: block;
+    background-color: #111111;
+    margin-right: 10px;
+}
+
+.dropdown-wrapper {
+    vertical-align: middle;
+    border-radius: 50px;
+}
+
+.dropdown-button {
+    border-radius: 0;
+    background-color: transparent;
+    font-size: 20px;
+    color:floralwhite;
+    justify-self: center;
+}
+
+.dropdown-item {
+    position: relative;
+    display: flex;
 }

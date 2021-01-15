@@ -2,30 +2,19 @@ import React, { useEffect, useState } from 'react';
 import 'materialize-css'
 import { Row, Preloader } from 'react-materialize';
 import CourseItem from '../CourseItem';
-import Axios from 'axios';
 import './style.css';
-
-export default function Search (){
-    const [searchResult, setSearchResult] = useState([]);
-    const [loading, setLoading] = useState(true);
+import {connect } from 'react-redux'
+import store from '../../redux/store'
+import { fetchSearchResults } from '../../redux/course';
+const Search = ({searchResult = []})=> {
 
     useEffect(() => {
-        //setTimeout(() => {
-            async function fetchItems() {
-                try {
-                } catch(err){
-                    throw new Error(`HTTP error! status: ` + err.message);
-                }   
-            }
-            
-            fetchItems();
-            
-        //}, 1000);
+       store.dispatch(fetchSearchResults())
     }, []);
 
     return(
         <div>
-            {loading ? <Preloader /> : 
+            {searchResult ? <Preloader /> : 
                 (<>
                     <ul>
                         {searchResult.map((course) => (
@@ -35,3 +24,12 @@ export default function Search (){
         </div>
     )
 }
+
+const mapStateToProps = state => {
+    const searchResult = state.courseReducer.searchResult;
+    return {
+        searchResult
+    }
+}
+
+export default connect(mapStateToProps)(Search)

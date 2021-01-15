@@ -17,8 +17,8 @@ export default function Dashboard(){
             <>
                 <UserProfile/>
                 <Divider/>
-                {userData.user.role=='student' ? <StudentCourse/> :
-                userData.user.role == 'lecturer' ? <LecturerCourse/> : <AdminDashboard/>}
+                {userData.user.role==='student' ? <StudentCourse/> :
+                userData.user.role ==='lecturer' ? <LecturerCourse/> : <AdminDashboard/>}
             </> :  <h2>You are not logged in</h2>}
         </div>
     )
