@@ -113,7 +113,7 @@ const AdminDashboard = ({users = [], courses = [] }) =>{
                                     Role
                                 </th>
                                 <th>
-                                <a href="/addnewuser"><Button style={{marginRight: "10px"}}><i className="fa fa-plus" aria-hidden="true" ></i></Button></a>
+                                <Link to="/addnewuser"><Button style={{marginRight: "10px"}}><i className="fa fa-plus" aria-hidden="true" ></i></Button></Link>
                                 </th>
                             </tr>
                         </thead>

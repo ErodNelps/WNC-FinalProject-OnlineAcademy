@@ -31,7 +31,7 @@ const videoStorage = multer.diskStorage({
     storage: imageStorage
  });
 
-router.post("/:id/add-chapter/upload", videoUpload.array("chapter", 10), async(req, res) => {
+router.post("/add-chapter/upload/:id", videoUpload.array("chapter", 10), async(req, res) => {
     const files = req.files
     try {
         for (i = 0; i<files.length; i++) {

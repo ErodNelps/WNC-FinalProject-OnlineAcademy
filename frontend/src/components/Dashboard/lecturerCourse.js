@@ -55,6 +55,7 @@ const LecturerCourse = ({lecturerCourse = []}) =>{
                                     {course.subCount}
                                 </td>
                                 <td>
+                                    <Link to={"/addchapter/" + `${course.id}`}><Button style={{marginRight: "10px"}}><i class="fa fa-pencil" aria-hidden="true"></i></Button></Link>
                                    <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
                                 </td>
                             </tr>))}</>) : <></>}

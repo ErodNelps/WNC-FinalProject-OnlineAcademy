@@ -68,7 +68,7 @@ function App() {
                 <Route path="/addnewcourse"> <AddNewCourse/></Route>
                 <Route path="/course/:id"><CourseDetail></CourseDetail></Route>
                 <Route path="/addnewuser"><AddNewUser></AddNewUser></Route>
-                <Route path="/addchapter"><AddNewChapter></AddNewChapter></Route>
+                <Route path="/addchapter/:id"><AddNewChapter></AddNewChapter></Route>
                 <Route path="/search/query=:searchText"><Search></Search></Route>
                 <Route path="/category/:catID"><Search></Search></Route>
                 <Route path="/subcat/:subcatID"></Route>
