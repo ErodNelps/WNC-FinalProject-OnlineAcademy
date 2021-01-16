@@ -73,6 +73,9 @@ const AdminDashboard = ({users = [], courses = [] }) =>{
                                     Subcription count
                                 </th>
                                 <th data-field="price">
+                                    Status
+                                </th>
+                                <th data-field="price">
                                 </th>
                             </tr>
                         </thead>
@@ -84,6 +87,9 @@ const AdminDashboard = ({users = [], courses = [] }) =>{
                                 </td>
                                 <td>
                                     {course.subCount}
+                                </td>
+                                <td>
+                                    {course.status}
                                 </td>
                                 <td>
                                    <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>

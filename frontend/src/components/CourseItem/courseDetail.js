@@ -118,7 +118,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
                        
                      </li>
             ))}</> : <></>}</ul></Row>
-            {vidID ? <ReactPlayer url={"http://localhost:8080/media/vid/" + vidID} ></ReactPlayer> : <></>}
+            {vidID ? <ReactPlayer url={"http://localhost:8080/media/vid/" + vidID} controls={true}></ReactPlayer> : <></>}
             <Divider/></>) : <p>Course not found</p>}
         </div>
     )

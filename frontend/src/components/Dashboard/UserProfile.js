@@ -16,7 +16,7 @@ export default function UserProfile(){
             (<><Row>
                 <Col className="thumbnail" >
                     <>
-                        {(userData.user.role=='student' || userData.user.role=='lecturer') ? (<img className="detail-thumbnail" src="user-student.png" width="200" height="200"></img>) : 
+                        {(userData.user.role==='student' || userData.user.role==='lecturer') ? (<img className="detail-thumbnail" src="user-student.png" width="200" height="200"></img>) : 
                         (<img className="detail-thumbnail" src="user-lecturer.png" width="200" height="200"></img>)}
                     </>
                 </Col>

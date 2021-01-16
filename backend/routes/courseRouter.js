@@ -153,9 +153,9 @@ router.get("/:id", async(req, res) => {
     }
 });
 
-router.put("/view-count-increment/:id", async(req, res) => {
+router.put("/view-count-increment/:id", (req, res) => {
     try{
-        await Course.updateOne({_id: req.params.id}, {$inc: {views: 1}})
+        Course.updateOne({_id: req.params.id}, {$inc: {views: 1}})
         //console.log(course)
         res.json(course)
     }

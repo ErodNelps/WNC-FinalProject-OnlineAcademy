@@ -44,7 +44,7 @@ const NavBar = ({categories = []}) => {
             preventScrolling: true
           }}>
           <Dropdown menuClassName="dropdown-menu" wrapperClassName="dropdown-wrapper" buttonClassName="dropdown-button" className="dropdown" title='Category'>
-            {categories ? <>{categories.map((category, index) => (<Link to={"/category/" +`${category.category}`}>
+            {categories ? <>{categories.map((category, index) => (<Link to={"/category/" + `${category.category}`} key={index}>
               <Dropdown.Item className="dropdown-item"  key={index} name={category.category}>{category.category} 
               <SubMenu subcats={category.subCategories} key={index}></SubMenu>
             </Dropdown.Item></Link>))}</> : <></>}
@@ -63,7 +63,7 @@ function SubMenu({subcats = []}){
     return (
       <Dropdown.Submenu>
         {subcats.map((category, index) => (
-        <Link style={{backgroundColor: "transparent", color: "#111111"}} to={"/subcat/"+ `${category.name}`}><Dropdown.Item  key={index} name={category.name}>{category.name}</Dropdown.Item></Link>))}
+        <Link key={index} style={{backgroundColor: "transparent", color: "#111111"}} to={"/subcat/"`${category.name}`}><Dropdown.Item  key={index} name={category.name}>{category.name}</Dropdown.Item></Link>))}
       </Dropdown.Submenu>)
 }
 

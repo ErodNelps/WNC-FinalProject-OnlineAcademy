@@ -13,7 +13,7 @@ export default function AddNewChapter(){
     const {userData} = useContext(userContext);
     const [uploading, setuploading] = useState(false)
     let history = useHistory()
-    let id = history.location.pathname.replace('/addchapter','')
+    let id = history.location.pathname.replace('/addchapter/','')
     const children = [];
     const {
         acceptedFiles,

@@ -172,7 +172,7 @@ export function fetchSyllabus (id) {
           let results = []
           for(var i in res.data){
               var data = res.data[i];
-              results.push({id: data._id, courseID: data.courseID, url:data.url, name: data.name})
+              results.push({id: data._id,reqID: data.reqID, courseID: data.courseID, url:data.url, name: data.name})
           }
           console.log(results)
           dispatch({
@@ -238,9 +238,7 @@ export function checkIsSubbed (userID, courseID) {
           await Axios.get("http://localhost:8080/student/check-subbed?userid=" + userID + "&courseid=" + courseID).then((res) => {
             if(res.data) {
               isSubbed = true;
-              
             }
-            console.log(res.data)
           });
           
           dispatch({

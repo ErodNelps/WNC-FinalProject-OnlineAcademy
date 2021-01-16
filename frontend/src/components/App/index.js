@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Switch, useHistory } from 'react-router';
+import { Route, Switch } from 'react-router';
 import {BrowserRouter} from 'react-router-dom'
 import Axios from 'axios'
 import NavBar from '../NavBar';
@@ -22,8 +22,6 @@ function App() {
     token: undefined,
     user: undefined,
   });
-
-  const history = useHistory();
 
   useEffect(_ => {
     const checkLoggedIn = async () => {
@@ -62,16 +60,16 @@ function App() {
                 <Route exact path="/">
                   <Home></Home>     
                 </Route>
-                <Route path="/login"> <Login/> </Route>
-                <Route path="/register"> <Register/> </Route>
-                <Route path="/dashboard"> <Dashboard/> </Route>
-                <Route path="/addnewcourse"> <AddNewCourse/></Route>
-                <Route path="/course/:id"><CourseDetail></CourseDetail></Route>
-                <Route path="/addnewuser"><AddNewUser></AddNewUser></Route>
-                <Route path="/addchapter/:id"><AddNewChapter></AddNewChapter></Route>
-                <Route path="/search/query=:searchText"><Search></Search></Route>
-                <Route path="/category/:catID"><Search></Search></Route>
-                <Route path="/subcat/:subcatID"></Route>
+                <Route path="/login" key={"login"}> <Login/> </Route>
+                <Route path="/register" key={"register"}> <Register/> </Route>
+                <Route path="/dashboard" key={"dashboard"}> <Dashboard/> </Route>
+                <Route path="/addnewcourse" key={"addcourse"}> <AddNewCourse/></Route>
+                <Route path="/course/:id" key={"course"}><CourseDetail></CourseDetail></Route>
+                <Route path="/addnewuser" key={"addnewuser"}><AddNewUser></AddNewUser></Route>
+                <Route path="/addchapter/:id" key={"addchapter"}><AddNewChapter></AddNewChapter></Route>
+                <Route path="/search/query=:searchText" key={"search"}><Search></Search></Route>
+                <Route path="/category/:catID" key={"cat"}><Search></Search></Route>
+                <Route path="/subcat/:subcatID" key={"subcat"}></Route>
               </Switch>
               <WebFooter/>
             </div>

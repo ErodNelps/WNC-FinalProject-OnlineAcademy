@@ -34,6 +34,9 @@ const StudentCourse = ({watchList=[], subList = []}) => {
                                     Subcription count
                                 </th>
                                 <th data-field="price">
+                                    Status
+                                </th>
+                                <th data-field="price">
                                 </th>
                             </tr>
                         </thead>
@@ -45,6 +48,9 @@ const StudentCourse = ({watchList=[], subList = []}) => {
                                 </td>
                                 <td>
                                     {course.subCount}
+                                </td>
+                                <td>
+                                    {course.status}
                                 </td>
                                 <td>
                                    <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
@@ -71,6 +77,9 @@ const StudentCourse = ({watchList=[], subList = []}) => {
                                     Subcription count
                                 </th>
                                 <th data-field="price">
+                                    Status
+                                </th>
+                                <th data-field="price">
                                 </th>
                             </tr>
                         </thead>
@@ -82,6 +91,9 @@ const StudentCourse = ({watchList=[], subList = []}) => {
                                 </td>
                                 <td>
                                     {course.subCount}
+                                </td>
+                                <td>
+                                    {course.status}
                                 </td>
                                 <td>
                                    <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>

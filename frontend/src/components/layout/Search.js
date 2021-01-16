@@ -6,8 +6,10 @@ import './style.css';
 import {connect } from 'react-redux'
 import store from '../../redux/store'
 import { fetchSearchResults } from '../../redux/course';
-const Search = ({searchResult = []})=> {
-    
+export default function Search () {
+    const [searchResult, setResult] = useState([]);
+    const [query, setQuery] = useState('');
+
     useEffect(() => {
        store.dispatch(fetchSearchResults())
     }, []);
@@ -24,12 +26,3 @@ const Search = ({searchResult = []})=> {
         </div>
     )
 }
-
-const mapStateToProps = state => {
-    const searchResult = state.courseReducer.searchResult;
-    return {
-        searchResult
-    }
-}
-
-export default connect(mapStateToProps)(Search)

@@ -8,7 +8,12 @@
 }
 
 .container {
+    color: floralwhite;
     margin-top: 50px;
     background-color: floralwhite;
     padding: 10px;
+}
+
+.detail-description{
+    color:floralwhite
 }
