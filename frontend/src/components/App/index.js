@@ -13,7 +13,7 @@ import CourseDetail from '../CourseItem/courseDetail'
 import UserContext from "./context/userContext";
 import './style.css'
 import AddNewCourse from '../Dashboard/addNewCourse';
-import Search from '../layout/Search'
+import Search from '../Search'
 import AddNewUser from '../Dashboard/addNewUser';
 import AddNewChapter from "../Dashboard/addNewChapter";
 
@@ -67,9 +67,7 @@ function App() {
                 <Route path="/course/:id" key={"course"}><CourseDetail></CourseDetail></Route>
                 <Route path="/addnewuser" key={"addnewuser"}><AddNewUser></AddNewUser></Route>
                 <Route path="/addchapter/:id" key={"addchapter"}><AddNewChapter></AddNewChapter></Route>
-                <Route path="/search/query=:searchText" key={"search"}><Search></Search></Route>
-                <Route path="/category/:catID" key={"cat"}><Search></Search></Route>
-                <Route path="/subcat/:subcatID" key={"subcat"}></Route>
+                <Route path="/search" key={"search"}><Search></Search></Route>
               </Switch>
               <WebFooter/>
             </div>

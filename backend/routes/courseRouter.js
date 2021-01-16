@@ -76,22 +76,73 @@ router.post("/add-new-course/:lect_id", async (req, res) => {
   
 })
 
+
 router.get("/search", async (req, res) => {
-    try{
-        const searchResults = await Course.find({
-            '$search': {
-              'index': 'title', 
-              'text': {
-                'query': req.params.searchText, 
-                'path': 'title'
-              }
-            }
-          }).sort('-views').limit(10);
-        res.json(searchResults);
-    }   catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+    if(req.query.q){
+        try{
+            const searchResults = await Course.aggregate([{
+                $search: {
+                    index: 'title',              
+                    compound: {
+                        must: [ {
+                            text: {
+                                query: req.query.q, 
+                                path: 'title'
+                            },
+                        },]
+                      }
+                }
+            }]);
+            console.log(searchResults)
+            res.json(searchResults);
+        }   catch (err) {
+            console.log(err)
+            res.status(500).json({ error: err.message });
+        }
+    } else {return res.status(500).json({error: 'Please enter search keywords!'});}
 });
+
+router.get("/search-with-refines", async (req, res) => {
+    if(req.query.q){
+        try{
+            const searchResults = await Course.aggregate([{
+                $search: {
+                    index: 'title',              
+                    compound: {
+                        must: [ {
+                            text: {
+                                query: req.query.q, 
+                                path: 'title'
+                            },
+                        },
+                        {
+                            text: {
+                                query: ["cat"],
+                                path: 'cat'
+                            }
+                        },]
+                      }
+                }
+            }]);
+            console.log(searchResults)
+            res.json(searchResults);
+        }   catch (err) {
+            console.log(err)
+            res.status(500).json({ error: err.message });
+        }
+    } else {return res.status(500).json({error: 'Please enter search keywords!'});}
+});
+// router.get("/search", async (req, res) => {
+//     try{
+//         const searchResults = await Course.find({
+//             $search: req.query.q
+//         });
+//         console.log(searchResults)
+//         res.json(searchResults);
+//     }   catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// });
 
 router.get("/catsearch", async (req, res) => {
     try{
@@ -154,15 +205,12 @@ router.get("/:id", async(req, res) => {
 });
 
 router.put("/view-count-increment/:id", (req, res) => {
-    try{
-        Course.updateOne({_id: req.params.id}, {$inc: {views: 1}})
-        //console.log(course)
+    Course.updateOne({_id: req.params.id}, {$inc: {views: 1}}).then(res =>{
         res.json(course)
-    }
-    catch(err){
+    }).catch(err => {
         res.status(500).json({ error: err.message });
-    }
-});
+    });
+ });
 
 
 

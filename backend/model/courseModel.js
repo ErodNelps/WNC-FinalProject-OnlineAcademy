@@ -16,6 +16,7 @@ const courseSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date().now },
     updatedAt: { type: Date, default: Date().now },
     lecturer: mongoose.Schema.Types.ObjectId,
+    cat: {type: String, required: true},
+    subcat: {type: String, required: true},
 });
-
 module.exports = Course = mongoose.model("course", courseSchema);

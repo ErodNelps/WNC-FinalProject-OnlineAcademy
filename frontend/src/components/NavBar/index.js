@@ -8,18 +8,18 @@ import './style.css'
 import {fetchAllCategory} from '../../redux/category'
 import {connect } from 'react-redux'
 import store from '../../redux/store'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const NavBar = ({categories = []}) => {
   const [searchText, setSearchText] = useState();
   useEffect(() => {
     store.dispatch(fetchAllCategory());
   }, [])
-
+  const history = useHistory()
   function keyPress(e){
     if(e.charCode === 13){
-       console.log(e.target.value);
-       // put the login here
+       let query = "/search?q=" + e.target.value;
+       history.push(query)
     }
  }
 
@@ -49,9 +49,13 @@ const NavBar = ({categories = []}) => {
               <SubMenu subcats={category.subCategories} key={index}></SubMenu>
             </Dropdown.Item></Link>))}</> : <></>}
           </Dropdown>
-          <Form inline>
-              <FormControl type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search" className="mr-sm-2" onKeyDown={keyPress}/>
-          </Form>
+          {/* <Form inline>
+              <FormControl type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search" className="mr-sm-2" onKeyPress={keyPress}/>
+          </Form> */}
+          <div className="mr-sm-2" inline>
+            <input type="text" name="query" value={ searchText } id="search" placeholder="Search..." onKeyPress={keyPress}/>
+            <i className="fa fa-search search-icon" aria-hidden="true"/>
+          </div>
           <AuthOptions></AuthOptions>
         </Navbar>
       </div>
@@ -63,7 +67,7 @@ function SubMenu({subcats = []}){
     return (
       <Dropdown.Submenu>
         {subcats.map((category, index) => (
-        <Link key={index} style={{backgroundColor: "transparent", color: "#111111"}} to={"/subcat/"`${category.name}`}><Dropdown.Item  key={index} name={category.name}>{category.name}</Dropdown.Item></Link>))}
+        <Link key={index} style={{backgroundColor: "transparent", color: "#111111"}} to={"/subcat/"+`${category.name}`}><Dropdown.Item  key={index} name={category.name}>{category.name}</Dropdown.Item></Link>))}
       </Dropdown.Submenu>)
 }
 

@@ -144,27 +144,6 @@ export function fetchLatest () {
   }   
 }
 
-export function fetchSearchResults (seachText) {
-  return async (dispatch, getState) => {
-      try {
-          const res = await Axios.get("http://localhost:8080/courses/catsearch?searchtext=" + seachText);
-          let results = []
-          for(var i in res.data){
-              var data = res.data[i];
-              results.push({_id: data._id, thumbnail: data.thumbnail, title: data.title, briefDes : data.briefDes, fullDes : data.fullDes, 
-                  rating : data.rating, rateCount: data.rateCount,subCount: data.subCount, price: data.price,
-                  bonus: data.bonus, status: data.status, views: data.views, createdAt: data.createdAt, updatedAt: data.updatedAt})
-          }
-          dispatch({
-              type: FETCH_SEARCH_RESULTS,
-              payload: results
-          });
-      } catch(error){
-        handleError(error, dispatch);
-      }
-  }   
-}
-
 export function fetchSyllabus (id) {
   return async (dispatch, getState) => {
       try {
