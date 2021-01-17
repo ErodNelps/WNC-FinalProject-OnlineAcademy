@@ -16,6 +16,7 @@ import AddNewCourse from '../Dashboard/addNewCourse';
 import Search from '../Search'
 import AddNewUser from '../Dashboard/addNewUser';
 import AddNewChapter from "../Dashboard/addNewChapter";
+import CourseJoin from '../CourseItem/courseJoin';
 
 function App() {
   const [userData, setUserData] = useState({
@@ -65,6 +66,7 @@ function App() {
                 <Route path="/dashboard" key={"dashboard"}> <Dashboard/> </Route>
                 <Route path="/addnewcourse" key={"addcourse"}> <AddNewCourse/></Route>
                 <Route path="/course/:id" key={"course"}><CourseDetail></CourseDetail></Route>
+                <Route path="/join/:id" key={"join"}><CourseJoin></CourseJoin></Route>
                 <Route path="/addnewuser" key={"addnewuser"}><AddNewUser></AddNewUser></Route>
                 <Route path="/addchapter/:id" key={"addchapter"}><AddNewChapter></AddNewChapter></Route>
                 <Route path="/search" key={"search"}><Search></Search></Route>

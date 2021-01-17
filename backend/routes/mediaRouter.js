@@ -4,10 +4,10 @@ const Media = require("../model/mediaModel")
 const multer = require("multer")
 const fs = require('fs')
 
-router.get("/vid/:reqid", async (req, res) => {
+router.get("/vid/:id", async (req, res) => {
     
     try{
-        const media = await Media.findOne({_id: req.params.reqid})
+        const media = await Media.findOne({_id: req.params.id})
         let stream = fs.createReadStream(media.url, { bufferSize: 64 * 1024 });
         stream.pipe(res);
     }   catch (err) {

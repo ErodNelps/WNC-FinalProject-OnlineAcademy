@@ -7,7 +7,7 @@ body {
     background-color: floralwhite;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin-bottom: -50px;
+  margin-bottom: 0px;
 }
 
 code {

@@ -61,7 +61,7 @@ const LecturerCourse = ({lecturerCourse = []}) =>{
                                     {course.status}
                                 </td>
                                 <td>
-                                <Link to={"/addchapter/" + course.id}><Button style={{marginRight: "10px"}}><i className="fa fa-pencil" aria-hidden="true"></i></Button></Link>
+                                <Link to={"/addchapter/" + course._id}><Button style={{marginRight: "10px"}}><i className="fa fa-pencil" aria-hidden="true"></i></Button></Link>
                                    <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
                                 </td>
                             </tr>))}</>) : <></>}

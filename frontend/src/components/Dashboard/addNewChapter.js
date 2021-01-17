@@ -1,20 +1,37 @@
-import React, {useState, useContext, useEffect, useRef, useMemo} from "react";
+import React, {useState, useContext, useEffect,  useMemo} from "react";
 import {useHistory} from 'react-router-dom'
 import {useDropzone} from 'react-dropzone';
-import Button from 'react-bootstrap/Button'
 import 'react-quill/dist/quill.snow.css';
 import userContext from "../App/context/userContext";
 import './style.css'
 import Axios from "axios";
-import { ProgressBar } from "react-materialize";
+import { ProgressBar, Divider, Modal, Button, CollectionItem, Collection } from "react-materialize";   
+import {Col, Row} from 'react-bootstrap';
 import 'materialize-css'
+import ReactPlayer from 'react-player'
+import {connect } from 'react-redux'
+import store from '../../redux/store'
+import {fetchCourseSeleccted, fetchSyllabus} from '../../redux/course'
 
-export default function AddNewChapter(){
+const AddNewChapter = ({courseSelected = {}, syllabus = []})=> {
     const {userData} = useContext(userContext);
-    const [uploading, setuploading] = useState(false)
-    let history = useHistory()
-    let id = history.location.pathname.replace('/addchapter/','')
+    const [uploading, setuploading] = useState(false);
+    const [name, setName] = useState('');
+    let history = useHistory();
+    let id = history.location.pathname.replace('/addchapter/','');
+    useEffect(() =>{
+        store.dispatch(fetchCourseSeleccted(id))
+        if(userData.user) {
+            store.dispatch(fetchSyllabus(id))
+        }
+    },[syllabus])
     const children = [];
+
+    const [vidID, setVID] = useState(null);
+    const fetchMedia = (id) => {
+        setVID(id);
+    }
+
     const {
         acceptedFiles,
         getRootProps,
@@ -40,10 +57,6 @@ export default function AddNewChapter(){
           {file.path} - {Math.ceil(file.size/1024)} KB
         </li>
       ));
-    useEffect(() => {
-    })
-
-    const chapterRef = useRef(null);
 
     // for (var i = 0; i < numVideo; i += 1) {
     //     children.push(<TextInput id={i} type="file" label={`Chapter ${i + 2}`}/>);
@@ -58,19 +71,26 @@ export default function AddNewChapter(){
         if(!userData.user){
             return
         }
-        setuploading(true)
+        
         try {
-            const data = new FormData()
+            if(name === ""){
+                alert("Please enter a name!")
+                return
+            } else {
+                setuploading(true);
+                const data = new FormData()
+                acceptedFiles.forEach(file => {
+                    data.append("chapter", file)
+                    data.append("name", name)
+                })
 
-            acceptedFiles.forEach(file => {
-                data.append("chapter", file)
-            })
-
-            Axios.post("http://localhost:8080/courses/add-chapter/upload/" + id, data).then((res =>{
-                setuploading(false)
-                alert("Chapter added")
-            }))
-
+                Axios.post("http://localhost:8080/courses/add-chapter/upload/" + id, data).then((res =>{
+                    setuploading(false)
+                    alert("Chapter added")
+                }))
+                store.dispatch(fetchCourseSeleccted(id))
+                store.dispatch(fetchSyllabus(id))
+            }
         } catch (err) {
             alert(err)
             setuploading(false)
@@ -79,21 +99,81 @@ export default function AddNewChapter(){
     }
 
     return (
-        <section className="container">
-            {/* {children} */}
-            <div {...getRootProps({style})}>
-                <input {...getInputProps()} />
-                <p>Drag & drop your videos here, or click to select files</p>
-            </div>
-            <aside>
-                <h5>Accepted videos</h5>
-                <ul>{acceptedFileItems}</ul>
-            </aside>
-            {uploading? <ProgressBar />: <></>}
-            <Button block size={"lg"} onClick={(e) => handleSubmit(e)}>
-                Upload
-            </Button>
-        </section>
+        <div className="edit-container">
+            <Row>
+                <Row className="label" style={{marginLeft: "10px", marginRight:"auto"}}><h4>Edit course</h4></Row>
+                <Col xs={6}>
+                    {/* <Button variant="primary" onClick={handleShow}>Add new video</Button> */}
+                    <Modal actions={[<Button flat modal="close" node="button" waves="green">Close</Button>]}
+                        bottomSheet={false}
+                        fixedFooter={false}
+                        header="Modal Header"
+                        id="Modal-0"
+                        open={false}
+                        options={{
+                            dismissible: true,
+                            endingTop: '10%',
+                            inDuration: 250,
+                            onCloseEnd: null,
+                            onCloseStart: null,
+                            onOpenEnd: null,
+                            onOpenStart: null,
+                            opacity: 0.5,
+                            outDuration: 250,
+                            preventScrolling: true,
+                            startingTop: '4%'
+                        }}
+                        trigger={<Button node="button" style={{marginLeft: "10px", marginRight:"auto"}}>Add new chapter</Button>}
+                        >
+                            <input type="text" placeholder="Name..." value={name} onChange={(e) => setName(e.target.value)}></input>
+                        <section className="container">
+                            <div {...getRootProps({style})}>
+                                <input {...getInputProps()} />
+                                <p>Drag & drop your videos here, or click to select files</p>
+                            </div>
+                            <aside>
+                                <h5>Accepted videos</h5>
+                                <ul >{acceptedFileItems}</ul>
+                            </aside>
+                            {uploading? <ProgressBar />: <></>}
+                            <Button block size={"lg"} onClick={(e) => handleSubmit(e)}>
+                                Upload
+                            </Button>
+                        </section>
+                    </Modal>
+                </Col>
+                <Col>
+                <Row>
+                    <Col>
+                        <Collection className="file-list">
+                        {syllabus ? <>{syllabus.map((vid) => (
+                        <CollectionItem onClick={() => fetchMedia(vid.id)} key={vid.id}>{vid.name} </CollectionItem>
+                        ))}</> : <></>}
+                        </Collection>
+                    </Col>
+                </Row>
+                    {vidID ? <ReactPlayer url={"http://localhost:8080/media/vid/" + vidID} controls={true}></ReactPlayer> : <></>}
+                    <Divider/>
+                </Col>
+            </Row>
+            
+            {/* <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title>Add new video</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose} className="edit-button">
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal> */}
+        </div>
     )
 }
 
@@ -108,7 +188,7 @@ const baseStyle = {
     borderColor: '#eeeeee',
     borderStyle: 'dashed',
     backgroundColor: '#fafafa',
-    color: '#bdbdbd',
+    color: '#1f1f1f',
     outline: 'none',
     transition: 'border .24s ease-in-out'
   };
@@ -125,3 +205,12 @@ const baseStyle = {
     borderColor: '#ff1744'
   };
   
+  
+const mapStateToProps = state =>{
+    const courseSelected = state.courseReducer.courseSelected;
+    const syllabus = state.courseReducer.syllabus;
+
+    return {courseSelected, syllabus}
+};
+
+export default connect (mapStateToProps)(AddNewChapter)

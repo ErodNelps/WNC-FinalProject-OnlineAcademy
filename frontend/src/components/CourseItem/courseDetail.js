@@ -16,12 +16,12 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
     useEffect(() =>{
         store.dispatch(fetchCourseSeleccted(id))
         if(userData.user) {
-                store.dispatch(checkMyCourse(userData.user.id, id))
-                store.dispatch(checkIsSubbed(userData.user.id, id))
-                store.dispatch(checkIsWatched(userData.user.id, id))
-                store.dispatch(fetchSyllabus(id))
+            store.dispatch(checkMyCourse(userData.user.id, id))
+            store.dispatch(checkIsSubbed(userData.user.id, id))
+            store.dispatch(checkIsWatched(userData.user.id, id))
+            store.dispatch(fetchSyllabus(id))
         }
-    },[])
+    },[isSubbed, isWatched])
     const handleAnynomous = () =>{
         if(userData.user){
 
@@ -33,7 +33,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
 
     const handleBuyBtn = () =>{
         if(userData.user){
-
+            store.dispatch(subscribeToCourse(userData.user.id, id))
         }
         else{
             alert("You have to log in!");
@@ -42,7 +42,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
 
     const handleJoin = () =>{
         if(userData.user){
-            store.dispatch(subscribeToCourse(userData.user.id, id))
+            history.push("/join/"+id);
         }
         else{
             alert("You have to log in!");

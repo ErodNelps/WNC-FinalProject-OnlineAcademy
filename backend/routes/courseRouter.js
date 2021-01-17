@@ -33,12 +33,13 @@ const videoStorage = multer.diskStorage({
 
 router.post("/add-chapter/upload/:id", videoUpload.array("chapter", 10), async(req, res) => {
     const files = req.files
+    let {name} = req.body
     try {
         for (i = 0; i<files.length; i++) {
             var newVideo = new Media({
                 courseID: req.params.id,
                 url: files[i].path,
-                name: files[i].originalname
+                name: name
             })
 
             newVideo.save(function (err) {

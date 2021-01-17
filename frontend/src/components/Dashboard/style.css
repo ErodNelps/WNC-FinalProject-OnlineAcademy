@@ -8,7 +8,7 @@
 }
 
 .container {
-    color: floralwhite;
+    color: #1f1f1f;
     margin-top: 50px;
     background-color: floralwhite;
     padding: 10px;
@@ -16,4 +16,32 @@
 
 .detail-description{
     color:floralwhite
+}
+
+.edit-button{
+    
+}
+
+.edit-container {
+    display: block;
+    padding: 50px 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 60vw;
+    background-color: #ede8dd;
+    align-content: flex-end;
+}
+
+.file-list {
+    list-style: square inside;
+    display: block;
+    align-items: center;
+}
+
+.label{
+    margin-left: "auto";
+    margin-right: "auto";
+    text-align: "center";
 }
