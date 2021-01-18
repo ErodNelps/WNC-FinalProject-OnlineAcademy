@@ -146,7 +146,7 @@ router.put("/change-email/:userid", async (req, res) => {
     var mailOptions={
       to: email,
       subject: "Online Academy: Email Changed",
-      html: "<h3>This is just to confirm a real email. Click the link below to confirm change. If it's not you, you can ignore this.</h3>"  + "<h1 style='font-weight:bold;'></h1>" +"<a>http://localhost:8080/users/confirmation/email-changed?userid="+req.params.userid+"&email="+email+"</a>" // html body
+      html: "<h3>This is just to confirm a real email. Click the link below to confirm change. If it's not you, you can ignore this.</h3>"  + "<h1 style='font-weight:bold;'></h1>" +"<a>http://localhost:8080/users/confirmation/emailchanged?userid="+req.params.userid+"&email="+email+"</a>" // html body
     };
     
     transporter.sendMail(mailOptions, (error, info) => {
@@ -164,7 +164,7 @@ router.put("/change-email/:userid", async (req, res) => {
   
 });
 
-router.get("/confirmation/email-changed", (req, res) => {
+router.get("/confirmation/emailchanged", auth, (req, res) => {
     console.log("confirmed")
     User.updateOne({_id: req.query.userid}, {$set: {email: req.query.email}}).then(res =>{
       res.status(200).json(res);
@@ -240,7 +240,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.delete("/delete", auth, async (req, res) => {
+router.delete("/delete", async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.user);
     res.json(deletedUser);
@@ -319,18 +319,6 @@ router.get("/:id", async (req, res) => {
 //     role: user.role,
 //   });
 // });
-
-router.get("/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-router.get("/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/", session: false }),
-  function(req, res) {
-      var token = req.user.token;
-      res.redirect("http://localhost:3000?token=" + token);
-  }
-);
 
 //watchlist
 

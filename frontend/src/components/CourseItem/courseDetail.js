@@ -5,11 +5,12 @@ import { connect } from 'react-redux'
 import './style.css'
 import userContext from '../App/context/userContext'
 import store from '../../redux/store'
-import { checkIsSubbed, fetchCourseSeleccted, checkIsWatched, checkMyCourse, addWatchList, subscribeToCourse, fetchSyllabus } from '../../redux/course'
+import { checkIsSubbed, fetchCourseSeleccted, checkIsWatched, checkMyCourse, addWatchList, subscribeToCourse, fetchSyllabus, fetchComment } from '../../redux/course'
 import { useHistory } from 'react-router-dom'
-import ReactPlayer from 'react-player'
+import CommentBox from './comment'
+import Axios from 'axios'
 
-const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = []}) =>{
+const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [], comments =[]}) =>{
     const {userData} = useContext(userContext);
     let history = useHistory()
     let id = history.location.pathname.replace('/course/','')
@@ -20,8 +21,27 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
             store.dispatch(checkIsSubbed(userData.user.id, id))
             store.dispatch(checkIsWatched(userData.user.id, id))
             store.dispatch(fetchSyllabus(id))
+            store.dispatch(fetchComment(id))
         }
-    },[isSubbed, isWatched])
+    },[comments])
+
+    // const commentOnChange = async (id) =>{
+    //     try {
+    //         const res = await Axios.get("http://localhost:8080/courses/fetch-comment/" + id);
+    //         let results = []
+    //         let user = {}
+    //         for(var i in res.data){
+    //             var data = res.data[i];
+    //             Axios.get("http://localhost:8080/users/"+ data.userID).then( res =>{
+    //               user = res
+    //               console.log("res 1: " + res)
+    //             })
+                
+    //             results.push({id: data._id, courseID: data.courseID, userFirstName: user.firstName, userLastName: user.lastName, comment: data.comment, rating: data.rating})
+    //         }
+    //     } catch(error){
+    //     }
+    // }
     const handleAnynomous = () =>{
         if(userData.user){
 
@@ -109,12 +129,14 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
             <Row className="full-description">{courseSelected.fullDes}</Row>
             <Divider/>
             <Row className="full-description"><ul>{syllabus ? <>{syllabus.map((vid) => (
-                       <li key={vid.name}>
+                       <li key={vid._id}>
                        {vid.name}
                        
                      </li>
             ))}</> : <></>}</ul></Row>
-            <Divider/></>) : <p>Course not found</p>}
+            <Divider/>
+            <CommentBox comments={comments}></CommentBox>
+            </>) : <p>Course not found</p>}
         </div>
     )
 };
@@ -125,8 +147,8 @@ const mapStateToProps = state =>{
     const isWatched = state.courseReducer.isWatched;
     const isMine = state.courseReducer.isMine;
     const syllabus = state.courseReducer.syllabus;
-
-    return {courseSelected, isSubbed, isWatched, isMine, syllabus}
+    const comments = state.courseReducer.comments
+    return {courseSelected, isSubbed, isWatched, isMine, syllabus, comments}
 };
 
 export default connect (mapStateToProps)(CourseDetail)

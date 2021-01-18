@@ -14,11 +14,13 @@ import {
   SET_COURSE_WATCHED,
   SET_COURSE_OWNED,
   FETCH_SYLLABUS,
+  FETCH_COMMENT,
 } from '../actions/types';
 
   const initialState = {
     courses: [],
     syllabus: [],
+    comment: [],
     courseSelected: {
       _id:'',
       thumbnail:'',
@@ -73,6 +75,8 @@ import {
         return {...state, isMine: action.payload}
       case FETCH_SYLLABUS:
         return {...state, syllabus: action.payload}
+      case FETCH_COMMENT:
+        return {...state, comments: action.payload}
       default: return state;
     }
   };
@@ -151,11 +155,35 @@ export function fetchSyllabus (id) {
           let results = []
           for(var i in res.data){
               var data = res.data[i];
-              results.push({id: data._id,reqID: data.reqID, courseID: data.courseID, url:data.url, name: data.name})
+              results.push({id: data._id, courseID: data.courseID, url:data.url, name: data.name})
           }
-          console.log(results)
           dispatch({
               type: FETCH_SYLLABUS,
+              payload: results
+          });
+      } catch(error){
+        handleError(error, dispatch);
+      }
+  }   
+}
+
+export function fetchComment (id) {
+  return async (dispatch, getState) => {
+      try {
+          const res = await Axios.get("http://localhost:8080/courses/fetch-comment/" + id);
+          let results = []
+          
+          for(var i in res.data){
+              var data = res.data[i];
+              let user = null;
+              Axios.get("http://localhost:8080/users/"+ data.userID).then( res =>{
+                user = {id: res.data.id,firstName: res.data.firstName, lastName: res.data.lastName}
+              })
+              
+              results.push({id: data._id, courseID: data.courseID, userFirstName: user.firstName, userLastName: user.lastName, comment: data.comment, rating: data.rating})
+          }
+          dispatch({
+              type: FETCH_COMMENT,
               payload: results
           });
       } catch(error){
