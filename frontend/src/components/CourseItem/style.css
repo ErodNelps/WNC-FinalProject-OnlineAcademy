@@ -12,9 +12,6 @@
     background-color: #1F1F1F;
 }
 
-.thumbnail{
-}
-
 .detail-thumbnail{
     margin-top: 20px;
 }
@@ -24,6 +21,7 @@
 }
 
 .full-description{
+    color: floralwhite;
     word-wrap: break-word;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -62,7 +60,7 @@
     font-size:small;
 }
 .course-name{
-    color: #fff;
+    color: floralwhite;
     margin-top: 20px;
     font-size: 30px;
     font-weight: bold;

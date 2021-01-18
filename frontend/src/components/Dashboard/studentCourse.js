@@ -53,7 +53,7 @@ const StudentCourse = ({watchList=[], subList = []}) => {
                                     {course.status}
                                 </td>
                                 <td>
-                                   <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true"></i></Button>
+                                   <Button style={{marginRight: "10px"}}><i className="fa fa-trash" aria-hidden="true" onClick={() =>{}}></i></Button>
                                 </td>
                             </tr>))}</>) : <></>}
                         </tbody>

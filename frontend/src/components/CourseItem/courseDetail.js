@@ -33,6 +33,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
 
     const handleBuyBtn = () =>{
         if(userData.user){
+            alert("Subbing")
             store.dispatch(subscribeToCourse(userData.user.id, id))
         }
         else{
@@ -65,11 +66,6 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
         else{
             alert("You have to log in!");
         }
-    }
-
-    const [vidID, setVID] = useState(null);
-    const fetchMedia = (id) => {
-        setVID(id);
     }
 
     return(
@@ -113,12 +109,11 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
             <Row className="full-description">{courseSelected.fullDes}</Row>
             <Divider/>
             <Row className="full-description"><ul>{syllabus ? <>{syllabus.map((vid) => (
-                       <li onClick={() => fetchMedia(vid.id)} key={vid.name}>
+                       <li key={vid.name}>
                        {vid.name}
                        
                      </li>
             ))}</> : <></>}</ul></Row>
-            {vidID ? <ReactPlayer url={"http://localhost:8080/media/vid/" + vidID} controls={true}></ReactPlayer> : <></>}
             <Divider/></>) : <p>Course not found</p>}
         </div>
     )

@@ -296,7 +296,7 @@ export function subscribeToCourse (userID, courseID) {
           var action = "subscribed"
           var isSubbed = false;
           const watchlistData = ({userID, courseID, action })
-          Axios.post("http://localhost:8080/student/subscibe", watchlistData).then((res) => {
+          Axios.post("http://localhost:8080/student/subscribe", watchlistData).then((res) => {
             isSubbed = true  
           });
           

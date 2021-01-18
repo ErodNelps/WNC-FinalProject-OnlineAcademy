@@ -134,9 +134,8 @@ router.post("/add-to-watchlist", async (req, res) => {
 
 router.post("/subscribe", async (req, res) => {
     let {userID, courseID, action} = req.body;
-    console.log(req.body)
     try{
-        const watchlist = new WatchList({
+        const subscription = new WatchList({
             courseID,
             studentID: userID,
             action
@@ -148,8 +147,12 @@ router.post("/subscribe", async (req, res) => {
     }
 });
 
-router.get('/removeWishList', (req, res) => {
-
+router.get('/remove-from-watchlist', (req, res) => {
+    try{
+        WatchList.deleteOne({courseID: req.query.courseid, studentID: req.query.userid, action: "watchlist"})
+    } catch(err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 module.exports = router;

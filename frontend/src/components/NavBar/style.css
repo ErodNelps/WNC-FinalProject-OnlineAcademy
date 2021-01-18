@@ -54,3 +54,7 @@
     position: relative;
     display: flex;
 }
+
+.search-bar {
+    display: block;
+}

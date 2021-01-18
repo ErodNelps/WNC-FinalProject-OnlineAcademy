@@ -128,10 +128,62 @@ router.post("/admin/add-new-user", async (req, res)=>{
     const savedUser = await newUser.save();
     res.json(savedUser);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ msg: err.message });
   }
 });
 
+router.put("/change-email/:userid", async (req, res) => {
+  let {email} = req.body
+  try{
+    if (!email)
+      return res.status(400).json({ msg: "Not all fields have been entered." });
+
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser)
+      return res
+        .status(400)
+        .json({ msg: "An account with this email already exists." });
+    var mailOptions={
+      to: email,
+      subject: "Online Academy: Email Changed",
+      html: "<h3>This is just to confirm a real email. Click the link below to confirm change. If it's not you, you can ignore this.</h3>"  + "<h1 style='font-weight:bold;'></h1>" +"<a>http://localhost:8080/users/confirmation/email-changed?userid="+req.params.userid+"&email="+email+"</a>" // html body
+    };
+    
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(400).json({ msg: 'Failed to send a confirmation email'});
+      }
+      console.log('Message sent: %s', info.messageId);   
+      console.log('Info: %s', info);
+    });
+
+    
+  } catch(err){
+        res.status(500).json({ msg: err.message });
+    } 
+  
+});
+
+router.get("/confirmation/email-changed", (req, res) => {
+    console.log("confirmed")
+    User.updateOne({_id: req.query.userid}, {$set: {email: req.query.email}}).then(res =>{
+      res.status(200).json(res);
+    })
+})
+
+router.put("/change-name/:userid", async (req, res) => {
+  let {firstName, lastName} = req.body
+  try{
+    if (!firstName || !lastName)
+      return res.status(400).json({ msg: "Not all fields have been entered." });
+
+    User.updateOne({_id: req.params.userid},  {$set: {firstName: firstName, lastName: lastName}}).then(res =>{
+      res.status(200).json(res);
+    })
+  } catch(err){
+        res.status(500).json({ error: err.message });
+    } 
+});
 
 router.post("/register/resendOTP", async(req, res) => {
   let {email} = req.body;

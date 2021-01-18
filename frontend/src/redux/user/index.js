@@ -44,8 +44,8 @@ export function fetchAllUser () {
               var data = res.data[i];
               users.push({_id: data._id, firstName: data.firstName, lastName: data.lastName, email:data.email, role: data.role})
           }
-          console.log("Server Response:")
-          console.log(res.data)
+          // console.log("Server Response:")
+          // console.log(res.data)
           dispatch({
               type: FETCH_USERS,
               payload: res.data

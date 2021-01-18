@@ -52,9 +52,8 @@ const NavBar = ({categories = []}) => {
           {/* <Form inline>
               <FormControl type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder="Search" className="mr-sm-2" onKeyPress={keyPress}/>
           </Form> */}
-          <div className="mr-sm-2" inline>
+          <div className="search-bar">
             <input type="text" name="query" value={ searchText } id="search" placeholder="Search..." onKeyPress={keyPress}/>
-            <i className="fa fa-search search-icon" aria-hidden="true"/>
           </div>
           <AuthOptions></AuthOptions>
         </Navbar>

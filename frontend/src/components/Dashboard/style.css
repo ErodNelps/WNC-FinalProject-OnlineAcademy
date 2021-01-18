@@ -17,7 +17,12 @@
 .detail-description{
     color:floralwhite
 }
-
+.user-profile{
+    color: floralwhite;
+    margin-top: 20px;
+    font-size: 30px;
+    font-weight: bold;
+}
 .edit-button{
     
 }
@@ -44,4 +49,5 @@
     margin-left: "auto";
     margin-right: "auto";
     text-align: "center";
+    color: floralwhite;
 }

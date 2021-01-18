@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const Course = require("../model/courseModel")
 const Category = require("../model/categoryModel")
-const CategoryCourse = require("../model/categoryCourseModel")
+const SubCategory = require("../model/subCategoryModel")
+const Comment = require("../model/commentModel")
 const Media = require("../model/mediaModel")
 const multer = require("multer")
 const fs = require('fs');
@@ -147,7 +148,19 @@ router.get("/search-with-refines", async (req, res) => {
 
 router.get("/catsearch", async (req, res) => {
     try{
-        const searchResults = await CategoryCourse.find({cat: req.query.searchtext});
+        const catHit = await Category.findOne({category: req.query.cat});
+        const searchResults = await Course.find({cat: catHit._id})
+        console.log(searchResults)
+        res.json(searchResults);
+    }   catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get("/subcatsearch", async (req, res) => {
+    try{
+        const catHit = await SubCategory.findOne({category: req.query.subcat});
+        const searchResults = await Course.find({subcat: catHit._id})
         console.log(searchResults)
         res.json(searchResults);
     }   catch (err) {
@@ -206,13 +219,37 @@ router.get("/:id", async(req, res) => {
 });
 
 router.put("/view-count-increment/:id", (req, res) => {
-    Course.updateOne({_id: req.params.id}, {$inc: {views: 1}}).then(res =>{
-        res.json(course)
-    }).catch(err => {
+    try{
+        Course.updateOne({_id: req.params.id}, {$inc: {views: 1}}).then(res =>{
+            res.json(course)
+        }).catch(err => {
+            res.status(500).json({ error: err.message });
+        });
+    }catch(err){
+        console.log(err)
         res.status(500).json({ error: err.message });
-    });
+    }
  });
 
+router.post("/send-comment", (req, res) =>{
+    let{comment, rating} = req.body
+    if(!rating) rating = 0;
+    if(req.query.userid || req.query.courseid){
+        const newComment = new Comment({
+            courseID: req.query.courseid,
+            userID: req.query.userid,
+            comment,
+            rating
+        })
+    }
+});
 
-
+router.get("/fetch-comment/:courseid", async (req, res) =>{
+    try{
+        const commentList = await Comment.find({courseID: req.params.courseid})
+        res.status(200).json(commentList)
+    } catch(err){
+        res.status(500).json({ error: err.message });
+    }
+});
 module.exports = router
