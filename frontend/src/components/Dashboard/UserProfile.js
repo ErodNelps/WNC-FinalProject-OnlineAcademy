@@ -9,6 +9,10 @@ export default function UserProfile(){
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [newEmail, setNewEmail] = useState('');
+    const [oldPassword, setOldPassword] = useState();
+    const [newPassword, setNewPassword] =useState();
+    const [repeatPassword, setRepeatPassword] = useState();
+
     const changePassword = (e) =>{
         e.preventDefault();
     }
@@ -46,6 +50,35 @@ export default function UserProfile(){
         try{
             Axios.put("http://localhost:8080/users/change-email/" + userData.user.id, {email: newEmail}).then(res =>{
                 alert('Email changed successfully')
+            }).catch((error) => {
+                alert(error.response.data.msg)
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleChangePassword = (e) => {
+        e.preventDefault();
+        if(newPassword == '' || oldPassword == '' || repeatPassword ==''){
+            alert('Not all fields have been entered')
+            return
+        }
+        if(newPassword.length < 6 || oldPassword.length < 6){
+            alert('Password length must be as least 6 characters long')
+            return
+        }
+        if(newPassword == oldPassword){
+            alert('New password cannot be the same as old password')
+            return
+        }
+        if(repeatPassword != newPassword){
+            alert('Repeat password is different')
+            return
+        }
+        try{
+            Axios.put("http://localhost:8080/users/change-password/" + userData.user.id, {oldPassword, newPassword}).then(res =>{
+                alert('Password changed successfully')
             }).catch((error) => {
                 alert(error.response.data.msg)
             })
@@ -123,7 +156,35 @@ export default function UserProfile(){
                                                     </Button>
                                             </Modal>
                         </p></div> </Row>
-                        <Row> <div className="course-name"> <p className="label">Password: <Button onClick={changePassword} style={{marginRight: "10px"}}>Change Password</Button></p></div> </Row>
+                        <Row> <div className="course-name"> <p className="label">Password: 
+                        <Modal actions={[<Button flat modal="close" node="button" waves="green">Close</Button>]}
+                                                bottomSheet={false}
+                                                fixedFooter={false}
+                                                header="Change name"
+                                                id="Modal-0"
+                                                open={false}
+                                                options={{
+                                                    dismissible: true,
+                                                    endingTop: '10%',
+                                                    inDuration: 250,
+                                                    onCloseEnd: null,
+                                                    onCloseStart: null,
+                                                    onOpenEnd: null,
+                                                    onOpenStart: null,
+                                                    opacity: 0.5,
+                                                    outDuration: 250,
+                                                    preventScrolling: true,
+                                                    startingTop: '4%'
+                                                }}
+                                                trigger={<Button style={{marginRight: "10px"}}>Change Password</Button>}
+                                                >
+                                                    <input type="password" placeholder="Old password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)}></input>
+                                                    <input type="password" placeholder="New password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)}></input>
+                                                    <input type="password" placeholder="Repeat new password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)}></input>
+                                                    <Button block size={"lg"} onClick={(e) => handleChangePassword(e)}>
+                                                        Change
+                                                    </Button>
+                                            </Modal></p></div> </Row>
                     </div>
                 </Col>
             </Row>

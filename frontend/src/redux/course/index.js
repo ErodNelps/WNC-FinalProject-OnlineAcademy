@@ -179,9 +179,11 @@ export function fetchComment (id) {
               Axios.get("http://localhost:8080/users/"+ data.userID).then( res =>{
                 user = {id: res.data.id,firstName: res.data.firstName, lastName: res.data.lastName}
               })
-              
+              console.log(user)
               results.push({id: data._id, courseID: data.courseID, userFirstName: user.firstName, userLastName: user.lastName, comment: data.comment, rating: data.rating})
+              console.log(results)
           }
+          console.log(results)
           dispatch({
               type: FETCH_COMMENT,
               payload: results

@@ -9,9 +9,12 @@ import { checkIsSubbed, fetchCourseSeleccted, checkIsWatched, checkMyCourse, add
 import { useHistory } from 'react-router-dom'
 import CommentBox from './comment'
 import Axios from 'axios'
+import Ratings from 'react-ratings-declarative'
 
 const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [], comments =[]}) =>{
     const {userData} = useContext(userContext);
+    const [comment, setComment] = useState('');
+    const [rating, setRating] = useState(0);
     let history = useHistory()
     let id = history.location.pathname.replace('/course/','')
     useEffect(() =>{
@@ -23,7 +26,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
             store.dispatch(fetchSyllabus(id))
             store.dispatch(fetchComment(id))
         }
-    },[comments])
+    },[])
 
     // const commentOnChange = async (id) =>{
     //     try {
@@ -42,6 +45,10 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
     //     } catch(error){
     //     }
     // }
+    const handleSummitComment = (e) =>{
+        e.preventDefault();
+        store.dispatch(fetchComment(id))
+    }
     const handleAnynomous = () =>{
         if(userData.user){
 
@@ -95,7 +102,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
                 <Col className="thumbnail" >
                     <img className="detail-thumbnail"
                     src={courseSelected.thumbnail} 
-                    maxwidth="200" maxheight="200"></img>
+                    width="200" height="200"></img>
                 </Col>
                 <Col className="detail-description" s={9}>
                     <div >
@@ -126,7 +133,7 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
                     <Col s={5} style={{textAlign:'center'}}>Email: {courseSelected.lecturer.data.email}</Col></>: <></>}
                 </Row>
             <Divider/>
-            <Row className="full-description">{courseSelected.fullDes}</Row>
+            <Row className="full-description" dangerouslySetInnerHTML={{__html: courseSelected.fullDes}}></Row>
             <Divider/>
             <Row className="full-description"><ul>{syllabus ? <>{syllabus.map((vid) => (
                        <li key={vid._id}>
@@ -135,7 +142,48 @@ const CourseDetail = ({courseSelected, isSubbed, isWatched, isMine, syllabus = [
                      </li>
             ))}</> : <></>}</ul></Row>
             <Divider/>
-            <CommentBox comments={comments}></CommentBox>
+            <div className="comment-box">
+        <h3>Rate course 
+            
+        </h3>
+        {/* {comment form} */}
+        <form className="comment-form" onSubmit={handleSummitComment}>
+          <div className="comment-form-fields">
+            <textarea placeholder="Comment" rows="4" required value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
+          </div>
+          <div className="comment-form-actions">
+          <Ratings rating={rating} widgetRatedColors="blue" changeRating={(newRating) => setRating(newRating)}>
+                <Ratings.Widget />
+                <Ratings.Widget />
+                <Ratings.Widget/>
+                <Ratings.Widget/>
+                <Ratings.Widget />
+            </Ratings>
+            <Button type="submit">Post Comment & Rating</Button>
+          </div>
+        </form>
+        {/* {buttonText} */}
+        <h4>Comments</h4>
+        <h4 className="comment-count">
+        {/* {this._getCommentsTitle(comments.length)} */}
+        </h4>
+        {/* Map comment here*/}
+        {comments ? <>{comments.map((comment, index) => (
+            <div key={index} className="comment">
+                <p className="comment-header">{comment.userFirstName} {comment.userLastName} 
+                {/* <Ratings rating={comment.rating}>
+                    <Ratings.Widget />
+                    <Ratings.Widget />
+                    <Ratings.Widget/>
+                    <Ratings.Widget/>
+                    <Ratings.Widget />
+                </Ratings> */}
+            </p>
+                <p className="comment-body">- {comment.comment}</p>
+            </div>
+        ))}</> : <></>}
+        
+    </div>
             </>) : <p>Course not found</p>}
         </div>
     )
@@ -147,7 +195,8 @@ const mapStateToProps = state =>{
     const isWatched = state.courseReducer.isWatched;
     const isMine = state.courseReducer.isMine;
     const syllabus = state.courseReducer.syllabus;
-    const comments = state.courseReducer.comments
+    const comments = state.courseReducer.comments;
+    console.log(comments)
     return {courseSelected, isSubbed, isWatched, isMine, syllabus, comments}
 };
 

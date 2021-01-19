@@ -8,7 +8,7 @@ import Ratings from 'react-ratings-declarative';
 export default function CommentBox({comments = [], courseID=''}){
     const {userData, setUserData} = useContext(userContext)
     const [comment, setComment] = useState('');
-    const [rating, setRating] = useState('');
+    const [rating, setRating] = useState(0);
     
     // constructor() {
     //   super();
@@ -39,13 +39,7 @@ export default function CommentBox({comments = [], courseID=''}){
     return(
     <div className="comment-box">
         <h3>Rate course 
-            <Ratings rating={rating} widgetRatedColors="blue"changeRating={(newRating) => setRating(newRating)}>
-                <Ratings.Widget />
-                <Ratings.Widget />
-                <Ratings.Widget widgetDimension="60px" svgIconViewBox="0 0 5 5" svgIconPath="M2 1 h1 v1 h1 v1 h-1 v1 h-1 v-1 h-1 v-1 h1 z" />
-                <Ratings.Widget widgetHoverColor="black" />
-                <Ratings.Widget />
-            </Ratings>
+            
         </h3>
         {/* {comment form} */}
         <form className="comment-form" onSubmit={handleSummitComment}>
@@ -53,6 +47,13 @@ export default function CommentBox({comments = [], courseID=''}){
             <textarea placeholder="Comment" rows="4" required value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
           </div>
           <div className="comment-form-actions">
+          <Ratings rating={rating} widgetRatedColors="blue" changeRating={(newRating) => setRating(newRating)}>
+                <Ratings.Widget />
+                <Ratings.Widget />
+                <Ratings.Widget/>
+                <Ratings.Widget/>
+                <Ratings.Widget />
+            </Ratings>
             <Button type="submit">Post Comment & Rating</Button>
           </div>
         </form>
@@ -64,11 +65,11 @@ export default function CommentBox({comments = [], courseID=''}){
         {/* Map comment here*/}
         {comments ? <>{comments.map((comment, index) => (
             <div key={index} className="comment">
-                <p className="comment-header">{comment.userFirstName} {comment.userLastName} <Ratings rating={comment.rating} widgetRatedColors="blue"changeRating={(newRating) => setRating(newRating)}>
+                <p className="comment-header">{comment.userFirstName} {comment.userLastName} <Ratings rating={comment.rating}>
                 <Ratings.Widget />
                 <Ratings.Widget />
-                <Ratings.Widget widgetDimension="60px" svgIconViewBox="0 0 5 5" svgIconPath="M2 1 h1 v1 h1 v1 h-1 v1 h-1 v-1 h-1 v-1 h1 z" />
-                <Ratings.Widget widgetHoverColor="black" />
+                <Ratings.Widget/>
+                <Ratings.Widget/>
                 <Ratings.Widget />
             </Ratings></p>
                 <p className="comment-body">- {comment.comment}</p>

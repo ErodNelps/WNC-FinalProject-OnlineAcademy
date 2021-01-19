@@ -13,6 +13,17 @@ router.get("/get-subcategory/:catID", async (req, res) => {
   });
 });
 
+router.get("/get-all-subcategory", async (req, res) => {
+  await SubCategory.find({}, (err, data) => {
+    if (err) {
+      return res.status(400).json({
+        msg: 'Your request could not be processed. Please try again.'
+      });
+    }
+    res.status(200).json(data);
+  });
+});
+
 router.post('/add', async (req, res) => {
   const name = req.body.subcatName;
   const catID = req.body.catID

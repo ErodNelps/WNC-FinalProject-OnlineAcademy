@@ -54,30 +54,30 @@ router.get("/get-all-category", async (req, res) => {
     res.status(200).json(data);
   });
 });
+
+
   
 router.delete('/delete/:catID', async (req, res) => {
-  
+ 
   try{
-    const existingCourse = await Course.find({cat: req.params.catID})
+    const existingCourse = await Course.findOne({cat: req.params.catID})
     if(existingCourse){
+      console.log(existingCourse)
       return res.status(400).json({ msg: 'There is still at least 1 course of this category' });
     }
     
     subCategoryModel.deleteMany({catID: req.body.catID})
-    Category.deleteOne({ _id: req.body.catID }, (err, data) => {
+    const deleted = await Category.deleteOne({ _id: req.body.catID }, (err, data) => {
       if (err) {
         return res.status(400).json({
           msg: 'Your request could not be processed. Please try again.'
         });
       }
-
-      res.status(200).json({
-        success: true,
-        message: `Category has been deleted successfully!`,
-        brand: data
-      });
+      console.log(err)
     });
+    res.json(deleted)
   } catch(err){
+    console.log(err)
     res.status(400).json({msg: err})
   }
 });

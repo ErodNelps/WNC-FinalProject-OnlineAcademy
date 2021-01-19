@@ -55,7 +55,7 @@ router.post("/add-chapter/upload/:id", videoUpload.array("chapter", 10), async(r
     } 
 })
 
-router.post("/upload-image", imageUpload.single("chapter"), async(req, res) => {
+router.post("/upload-image", imageUpload.single("thumbnail"), async(req, res) => {
     const file = req.file
     mimetype = file.mimetype;
     currentImg = file;  
@@ -64,12 +64,12 @@ router.post("/upload-image", imageUpload.single("chapter"), async(req, res) => {
 
 router.post("/add-new-course/:lect_id", async (req, res) => {
     try{
-        let { title, briefDes, price, bonus} = req.body;
+        let { title, briefDes,fullDes, price, bonus, cat, subcat} = req.body;
         var img = fs.readFileSync(currentImg.path);
         var encodeImage = "data:" + mimetype + ";base64," + img.toString('base64');
         const lect_id = req.params.lect_id;
         
-        const newCourse = new Course({thumbnail: encodeImage, title, briefDes, fullDes: " ", rating: 0.0, rateCount: 0, subCount: 0, price, bonus,status: "On going", views: 0, createdAt: Date.now(), updatedAt: Date.now(), lecturer: lect_id});
+        const newCourse = new Course({thumbnail: encodeImage, title, briefDes, fullDes, rating: 0.0, rateCount: 0, subCount: 0, price, bonus,status: "On going", views: 0, createdAt: Date.now(), updatedAt: Date.now(), lecturer: lect_id, cat, subcat});
         const savedCourse = await newCourse.save();
         res.json(savedCourse);
     } catch (err) {
@@ -146,22 +146,20 @@ router.get("/search-with-refines", async (req, res) => {
 //     }
 // });
 
-router.get("/catsearch", async (req, res) => {
+router.get("/catsearch/:cat", async (req, res) => {
     try{
-        const catHit = await Category.findOne({category: req.query.cat});
+        const catHit = await Category.findOne({category: req.params.cat});
         const searchResults = await Course.find({cat: catHit._id})
-        console.log(searchResults)
         res.json(searchResults);
     }   catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-router.get("/subcatsearch", async (req, res) => {
+router.get("/subcatsearch/:subcat", async (req, res) => {
     try{
-        const catHit = await SubCategory.findOne({category: req.query.subcat});
+        const catHit = await SubCategory.findOne({category: req.params.subcat});
         const searchResults = await Course.find({subcat: catHit._id})
-        console.log(searchResults)
         res.json(searchResults);
     }   catch (err) {
         res.status(500).json({ error: err.message });
@@ -247,6 +245,7 @@ router.post("/send-comment", (req, res) =>{
 router.get("/fetch-comment/:courseid", async (req, res) =>{
     try{
         const commentList = await Comment.find({courseID: req.params.courseid})
+        console.log(commentList)
         res.status(200).json(commentList)
     } catch(err){
         res.status(500).json({ error: err.message });

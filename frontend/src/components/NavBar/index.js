@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {Navbar, Icon } from 'react-materialize'
-import { Form, FormControl } from 'react-bootstrap'
 import Dropdown from 'react-multilevel-dropdown'
 import 'materialize-css'
 import AuthOptions from '../App/authOptions'
@@ -66,7 +65,7 @@ function SubMenu({subcats = []}){
     return (
       <Dropdown.Submenu>
         {subcats.map((category, index) => (
-        <Link key={index} style={{backgroundColor: "transparent", color: "#111111"}} to={"/subcat/"+`${category.name}`}><Dropdown.Item  key={index} name={category.name}>{category.name}</Dropdown.Item></Link>))}
+        <Link key={index} style={{backgroundColor: "transparent", color: "#111111"}} to={"/subcategory/"+`${category.name}`}><Dropdown.Item  key={index} name={category.name}>{category.name}</Dropdown.Item></Link>))}
       </Dropdown.Submenu>)
 }
 

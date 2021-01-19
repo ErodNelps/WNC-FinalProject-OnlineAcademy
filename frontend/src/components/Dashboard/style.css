@@ -51,3 +51,33 @@
     text-align: "center";
     color: floralwhite;
 }
+
+.dropdown-1{
+    position: absolute;
+    display: block;
+}
+
+.dropdown-menu-1 {
+    position: absolute;
+    display: block;
+    background-color: floralwhite;
+    margin-right: 10px;
+}
+
+.dropdown-wrapper-1 {
+    vertical-align: middle;
+    border-radius: 50px;
+}
+
+.dropdown-button-1 {
+    border-radius: 0;
+    background-color: transparent;
+    font-size: 20px;
+    color:#1f1f1f;
+    justify-self: center;
+}
+
+.dropdown-item-1 {
+    position: relative;
+    display: flex;
+}

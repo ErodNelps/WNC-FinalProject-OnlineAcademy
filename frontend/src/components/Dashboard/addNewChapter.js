@@ -24,6 +24,12 @@ const AddNewChapter = ({courseSelected = {}, syllabus = []})=> {
         if(userData.user) {
             store.dispatch(fetchSyllabus(id))
         }
+    },[])
+
+    useEffect(() =>{
+        if(userData.user) {
+            store.dispatch(fetchSyllabus(id))
+        }
     },[syllabus])
     const children = [];
 

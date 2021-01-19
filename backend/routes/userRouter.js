@@ -185,6 +185,25 @@ router.put("/change-name/:userid", async (req, res) => {
     } 
 });
 
+router.put("/change-password/:userid", async (req, res) => {
+  let {oldPassword, newPassword} = req.body
+  try{
+    const user = await User.findOne({ _id: req.params.userid });
+    if (!user) return res.status(400).json({ msg: "User does not exist." });
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
+
+    const salt = await bcrypt.genSalt();
+    const newPasswordHash = await bcrypt.hash(newPassword, salt);
+
+    User.updateOne({_id: req.params.userid},  {$set: {password: newPasswordHash}}).then(res =>{
+      res.json(res);
+    })
+  } catch(err){
+        res.status(500).json({ msg: err.message });
+    } 
+});
+
 router.post("/register/resendOTP", async(req, res) => {
   let {email} = req.body;
   if (!email)

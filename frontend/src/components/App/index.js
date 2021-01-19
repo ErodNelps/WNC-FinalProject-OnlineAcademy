@@ -17,6 +17,7 @@ import Search from '../Search'
 import AddNewUser from '../Dashboard/addNewUser';
 import AddNewChapter from "../Dashboard/addNewChapter";
 import CourseJoin from '../CourseItem/courseJoin';
+import SearchCat from '../CourseItem/searchCat';
 
 function App() {
   const [userData, setUserData] = useState({
@@ -70,6 +71,7 @@ function App() {
                 <Route path="/addnewuser" key={"addnewuser"}><AddNewUser></AddNewUser></Route>
                 <Route path="/addchapter/:id" key={"addchapter"}><AddNewChapter></AddNewChapter></Route>
                 <Route path="/search" key={"search"}><Search></Search></Route>
+                <Route path="/category/:catname" key={"catsearch"}><SearchCat></SearchCat></Route>
               </Switch>
               <WebFooter/>
             </div>

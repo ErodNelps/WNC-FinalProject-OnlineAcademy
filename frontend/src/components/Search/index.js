@@ -37,7 +37,7 @@ export default function Search () {
 
     const fetchSearchResult = (updatedPageNo = '',query) => {
         const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
-        const searchUrl = `http://localhost:8080/courses/search?q=${query}${pageNumber}`
+        const searchUrl = `http://localhost:8080/courses/catsearch?cat=${query}${pageNumber}`
         let results = []
         if(query === ''){
             alert ("Please enter search terms!")
@@ -74,14 +74,14 @@ export default function Search () {
         if(e.charCode === 13){
             history.push({
                 pathname: '/search',
-                search: '?q=' + query
+                search: '?cat=' + query
               })
             fetchSearchResult(1, query)          
         }
     }
 
     useEffect(() => {
-        setQuery(urlParams.get('q'));
+        setQuery(urlParams.get('cat'));
         fetchSearchResult(1, query)
     },[]);
 

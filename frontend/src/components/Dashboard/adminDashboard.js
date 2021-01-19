@@ -74,7 +74,7 @@ const AdminDashboard = ({users = [], courses = [], categories= []}) =>{
         e.preventDefault();
         try{
             Axios.delete("http://localhost:8080/category/delete/"+ catID).then(res =>{
-                alert(catName + 'category has been delete')
+                alert(catName + ' category has been delete')
             }).catch((error) => {
                 alert(error.response.data.error)
             })
